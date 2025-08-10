@@ -57,7 +57,7 @@ raid_messages = [
     "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧𝗛 𝗙𝗔𝗔𝗗𝗞𝗘 𝗥𝗔𝗞𝗗𝗜𝗔 𝗠𝗔‌𝗔‌𝗞𝗘 𝗟𝗢𝗗𝗘 𝗝𝗔𝗔 𝗔𝗕𝗕 𝗦𝗜𝗟𝗪𝗔𝗟𝗘 👄👄", 
     "𝗖𝗛𝗔𝗟 𝗕𝗘𝗧𝗔 𝗧𝗨𝗝𝗛𝗘 𝗠𝗔‌𝗔‌𝗙 𝗞𝗜𝗔 🤣 𝗔𝗕𝗕 𝗔𝗣𝗡𝗜 𝗚𝗙 𝗞𝗢 𝗕𝗛𝗘𝗝", 
     "𝗧𝗘𝗥𝗜 𝗚𝗙 𝗞𝗢 𝗘𝗧𝗡𝗔 𝗖𝗛𝗢𝗗𝗔 𝗕𝗘‌𝗛𝗘𝗡 𝗞𝗘 𝗟𝗢𝗗𝗘 𝗧𝗘𝗥𝗜 𝗚𝗙 𝗧𝗢 𝗠𝗘𝗥𝗜 𝗥Æ𝗡𝗗𝗜 𝗕𝗔𝗡𝗚𝗔𝗬𝗜 𝗔𝗕𝗕 𝗖𝗛𝗔𝗟 𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗞𝗢 𝗖𝗛𝗢𝗗𝗧𝗔 𝗙𝗜𝗥𝗦𝗘 ♥️💦😆😆😆😆", 
-    "𝗦𝗨𝗡 𝗠𝗔‌𝗔‌𝗗𝗔𝗥𝗖𝗛Ø𝗗 𝗝𝗬𝗔𝗗𝗔 𝗡𝗔 𝗨𝗖𝗛𝗔𝗟 𝗠𝗔‌𝗔‌ 𝗖𝗛𝗢𝗗 𝗗𝗘𝗡𝗚𝗘 𝗘𝗞 𝗠𝗜𝗡 𝗠𝗘𝗜 ✅🤣🔥🤩", 
+    "𝗦𝗨𝗡 𝗠𝗔‌𝗔‌𝗗𝗔𝗥𝗖𝗛Ø𝗗 𝗝𝗬𝗔𝗗𝗔 𝗡𝗔 𝗨𝗖𝗛𝗔𝗟 𝗠𝗔‌𝗔‌ 𝗖𝗛𝗢𝗗 𝗗𝗘𝗡𝗚𝗘 𝗘𝗞 �_M𝗜𝗡 𝗠𝗘𝗜 ✅🤣🔥🤩", 
     "𝗧𝗘𝗥𝗜 𝗕𝗘𝗛𝗡 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧 𝗠𝗘 𝗞𝗘𝗟𝗘 𝗞𝗘 𝗖𝗛𝗜𝗟𝗞𝗘 🤤🤤", 
     "𝗧𝗘𝗥𝗜 𝗕𝗔𝗛𝗘𝗡 𝗞𝗜 𝗚𝗔𝗔𝗡𝗗 𝗠𝗘𝗜 𝗢𝗡𝗘𝗣𝗟𝗨𝗦 𝗞𝗔 𝗪𝗥𝗔𝗣 𝗖𝗛𝗔𝗥𝗚𝗘𝗥 30𝗪 𝗛𝗜𝗚𝗛 𝗣𝗢𝗪𝗘𝗥 💥😂😎", 
     "𝗔𝗥𝗘 𝗥𝗘 𝗠𝗘𝗥𝗘 𝗕𝗘𝗧𝗘 𝗞𝗬𝗢𝗨𝗡 𝗦𝗣𝗘𝗘𝗗 𝗣𝗔𝗞𝗔𝗗 𝗡𝗔 𝗣𝗔𝗔𝗔 𝗥𝗔𝗛𝗔 𝗔𝗣𝗡𝗘 𝗕𝗔𝗔𝗣 𝗞𝗔 𝗛𝗔𝗛𝗔𝗛🤣🤣", 
@@ -65,28 +65,21 @@ raid_messages = [
     "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗘 𝗕𝗛𝗢𝗦𝗗𝗘 𝗠𝗘𝗜 𝗚𝗜𝗧𝗛𝗨𝗕 𝗗𝗔𝗟 𝗞𝗘 𝗔𝗣𝗡𝗔 𝗕𝗢𝗧 𝗛𝗢𝗦𝗧 𝗞𝗔𝗥𝗨𝗡𝗚𝗔𝗔 🤩👊👤😍", 
     "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗜 𝗖😂𝗛𝗨𝗨‌𝗧 𝗞𝗔𝗞𝗧𝗘 🤱 𝗚𝗔𝗟𝗜 𝗞𝗘 𝗞𝗨𝗧𝗧𝗢 🦮 𝗠𝗘 𝗕𝗔𝗔𝗧 𝗗𝗨𝗡𝗚𝗔 𝗣𝗛𝗜𝗥 🍞 𝗕𝗥𝗘𝗔𝗗 𝗞𝗜 𝗧𝗔𝗥𝗛 𝗞𝗛𝗔𝗬𝗘𝗡𝗚𝗘 𝗪𝗢 𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧", 
     "𝗧𝗘𝗥𝗜 𝗥Æ𝗡𝗗𝗜 𝗠𝗔‌𝗔‌ 𝗦𝗘 𝗣𝗨𝗖𝗛𝗡𝗔 𝗕𝗔𝗔𝗣 𝗞𝗔 𝗡𝗔𝗔𝗠 𝗕𝗔𝗛𝗘𝗡 𝗞𝗘 𝗟𝗢𝗗𝗘𝗘𝗘𝗘𝗘 🤩🥳😳", 
-    "𝗧𝗘𝗥𝗔 𝗕𝗔𝗔𝗣 𝗝𝗢𝗛𝗡𝗬 𝗦𝗜𝗡𝗦 𝗖𝗜𝗥𝗖𝗨𝗦 𝗞𝗔𝗬 𝗕𝗛𝗢𝗦𝗗𝗘 𝗝𝗢𝗞𝗘𝗥 𝗞𝗜 𝗖𝗛𝗜𝗗𝗔𝗔𝗦 𝟭𝟰 𝗟𝗨𝗡𝗗 𝗞𝗜 𝗗𝗛𝗔𝗔𝗥 𝗧𝗘𝗥𝗜 𝗠𝗨𝗠𝗠𝗬 𝗞𝗜 𝗖𝗛𝗨𝗧 𝗠𝗔𝗜 𝟮𝟬𝟬 𝗜𝗡𝗖𝗛 𝗞𝗔 𝗟𝗨𝗡𝗗"
+    "𝗧𝗘𝗥𝗔 𝗕𝗔𝗔𝗣 𝗝𝗢𝗛𝗡𝗬 𝗦𝗜𝗡𝗦 𝗖𝗜𝗥𝗖𝗨𝗦 𝗞𝗔𝗬 𝗕𝗛𝗢𝗦𝗗𝗘 𝗝𝗢𝗞𝗘𝗥 𝗞𝗜 𝗖𝗛𝗜𝗗𝗔𝗔𝗦 𝟭𝟰 𝗟𝗨𝗡𝗗 𝗞𝗜 𝗗𝗛𝗔𝗔𝗥 𝗧𝗘𝗥𝗜 𝗠𝗨𝗠𝗠𝗬 𝗞𝗜 𝗖𝗛𝗨𝗧 𝗠𝗔𝗜 𝟮𝟬𝟬 𝗜𝗡𝗖𝗛 𝗞𝗔 �_L𝗨𝗡𝗗"
 ]
 love_messages = [
     "💖 𝗠𝗼𝗵𝗮𝗯𝗯𝗮𝘁 𝗸𝗮 𝗷𝘂𝗻𝗼𝗼𝗻 𝘀𝗶𝗿𝗳 𝘂𝗻𝗸𝗼 𝗵𝗼𝘁𝗮 𝗵𝗮𝗶\n𝗝𝗶𝗻𝗵𝗲 𝗽𝘆𝗮𝗮𝗿 𝗸𝗶 𝗸𝗮𝗱𝗮𝗿 𝗵𝗼𝘁𝗶 𝗵𝗮𝗶 💕",
     "🌙 𝗖𝗵𝗮𝗻𝗱𝗻𝗶 𝗿𝗮𝗮𝘁 𝗺𝗲𝗶𝗻 𝘁𝗲𝗿𝗶 𝘆𝗮𝗮𝗱𝗼𝗻 𝗸𝗮 𝗷𝗮𝗱𝗼𝗼 𝗵𝗮𝗶,\n𝗗𝗶𝗹 𝗸𝗲 𝗵𝗮𝗿 𝗸𝗼𝗻𝗲 𝗺𝗲𝗶𝗻 𝘀𝗶𝗿𝗳 𝘁𝗲𝗿𝗮 𝗵𝗶 𝗮𝗮𝘀𝗵𝗶𝘆𝗮𝗮𝗻𝗮 𝗵𝗮𝗶 💫",
-    "❤️ 𝗭𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗲 𝘀𝗮𝗳𝗮𝗿 𝗺𝗲𝗶𝗻 𝗺𝗶𝗹𝘁𝗶 𝗿𝗮𝗵𝗲 𝘁𝗲𝗿𝗶 𝗺𝘂𝘀𝗸𝗮𝗮𝗻,\n𝗬𝗮𝗵𝗶 𝗵𝗮𝗶 𝗺𝗲𝗿𝗶 𝗱𝘂𝗮 𝗵𝗮𝗿 𝘀𝘂𝗯𝗮𝗵 𝗮𝘂𝗿 𝘀𝗵𝗮𝗮𝗺 💝",
+    "❤️ �_Z𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗲 𝘀𝗮𝗳𝗮𝗿 𝗺𝗲𝗶𝗻 𝗺𝗶𝗹𝘁𝗶 𝗿𝗮𝗵𝗲 𝘁𝗲𝗿𝗶 𝗺𝘂𝘀𝗸𝗮𝗮𝗻,\n𝗬𝗮𝗵𝗶 𝗵𝗮𝗶 𝗺𝗲𝗿𝗶 𝗱𝘂𝗮 𝗵𝗮𝗿 𝘀𝘂𝗯𝗮𝗵 𝗮𝘂𝗿 𝘀𝗵𝗮𝗮𝗺 💝",
     "💌 𝗛𝗮𝗿 𝘀𝗵𝗮𝘆𝗮𝗿𝗶 𝘁𝗲𝗿𝗶 𝘆𝗮𝗮𝗱 𝗺𝗲𝗶𝗻 𝗹𝗶𝗸𝗵𝘁𝗮 𝗵𝗼𝗼𝗻,\n𝗧𝘂 𝗺𝗲𝗿𝗶 𝗺𝗼𝗵𝗮𝗯𝗯𝗮𝘁, 𝘁𝘂 𝗺𝗲𝗿𝗮 𝗮𝗿𝗺𝗮𝗮𝗻 𝗵𝗮𝗶 💖",
     "🌹 𝗧𝘂𝗺𝗵𝗮𝗿𝗮 𝗻𝗮𝗮𝗺 𝗹𝗲𝗸𝗮𝗿 𝗹𝗶𝗸𝗵𝗶 𝗵𝗮𝗶 𝗵𝗮𝗿 𝗴𝗵𝗮𝘇𝗮𝗹,\n𝗧𝘂𝗺 𝗺𝗲𝗿𝗶 𝘇𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗶 𝘀𝗮𝗯𝘀𝗲 𝗸𝗵𝗼𝗼𝗯𝘀𝘂𝗿𝗮𝘁 𝗺𝗶𝘀𝗮𝗮𝗹 💕",
     "✨ 𝗧𝗲𝗿𝗲 𝗯𝗶𝗻𝗮 𝘇𝗶𝗻𝗱𝗮𝗴𝗶 𝗮𝗱𝗵𝗼𝗼𝗿𝗶 𝗹𝗮𝗴𝘁𝗶 𝗵𝗮𝗶,\n𝗧𝘂 𝗵𝗼 𝘁𝗼𝗵 𝘀𝗮𝗯 𝗸𝘂𝗰𝗵 𝗽𝗼𝗼𝗿𝗮 𝗹𝗮𝗴𝘁𝗮 𝗵𝗮𝗶 💞",
     "🔥 𝗛𝗮𝗿 𝗱𝗵𝗮𝗱𝗸𝗮𝗻 𝗺𝗲𝗶𝗻 𝘀𝗶𝗿𝗳 𝘁𝗲𝗿𝗮 𝗵𝗶 𝘇𝗶𝗸𝗿 𝗵𝗮𝗶,\n𝗧𝘂 𝗺𝗲𝗿𝗶 𝘇𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗮 𝘀𝗮𝗯𝘀𝗲 𝗸𝗵𝗼𝗼𝗯𝘀𝘂𝗿𝗮𝘁 𝗳𝗶𝗸𝗿 𝗵𝗮𝗶 ❤️",
-    "🌸 𝗧𝗲𝗿𝗲 𝗯𝗶𝗻𝗮 𝗵𝗮𝗿 𝗹𝗮𝗺𝗵𝗮 𝘀𝗼𝗼𝗻𝗮 𝘀𝗮 𝗹𝗮𝗴𝘁𝗮 𝗵𝗮𝗶,\n𝗔𝘂𝗿 𝘁𝗲𝗿𝗲 𝘀𝗮𝘁𝗵 𝘀𝗮𝗯 𝗸𝘂𝗰𝗵 𝗿𝗼𝘀𝗵𝗮𝗻 𝗵𝗼 𝗷𝗮𝗮𝘁𝗮 𝗵𝗮𝗶 💖",
+    "🌸 𝗧𝗲𝗿𝗲 𝗯𝗶𝗻𝗮 𝗵𝗮𝗿 𝗹𝗮𝗺𝗵𝗮 𝘀𝗼𝗼𝗻𝗮 𝘀𝗮 𝗹𝗮𝗴𝘁𝗮 𝗵𝗮𝗶,\n𝗔𝘂𝗿 𝘁𝗲𝗿𝗲 𝘀𝗮𝘁𝗵 𝘀𝗮𝗯 𝗸𝘂𝗰𝗵 𝗿𝗼𝘀𝗵𝗮𝗻 𝗵𝗼 𝗷𝗮𝗮𝘁𝗮 𝗵𝗮�_i 💖",
     "💍 𝗣𝘆𝗮𝗮𝗿 𝗸𝗶 𝗸𝗼𝗶 𝗺𝗮𝗻𝘇𝗶𝗹 𝗻𝗮𝗵𝗶,\n𝗕𝗮𝘀 𝗲𝗸 𝘀𝗮𝗳𝗮𝗿 𝗵𝗮𝗶 𝗷𝗼 𝘁𝗲𝗿𝗶 𝗺𝘂𝘀𝗸𝗮𝗮𝗻 𝘀𝗲 𝗿𝗼𝘀𝗵𝗮𝗻 𝗵𝗮𝗶 🌹",
     "💕 𝗧𝘂 𝗺𝗲𝗿𝗶 𝗱𝘂𝗮𝗼𝗻 𝗸𝗮 𝘄𝗼 𝗵𝗶𝘀𝘀𝗮 𝗵𝗮𝗶,\n𝗝𝗶𝘀𝗲 𝗔𝗹𝗹𝗮𝗵 𝗻𝗲 𝘀𝗮𝗯𝘀𝗲 𝗸𝗵𝗼𝗼𝗯𝘀𝘂𝗿𝗮𝘁 𝘁𝗮𝘂𝗿 𝗽𝗮𝗿 𝗾𝗮𝗯𝗼𝗼𝗹 𝗸𝗶𝘆𝗮 💞",
     "🌹 𝗧𝗲𝗿𝗲 𝗵𝗮𝘀𝗶𝗻 𝗹𝗮𝗯𝗼𝗻 𝗸𝗶 𝗺𝘂𝘀𝗸𝗮𝗮𝗻 𝗺𝗲𝗿𝗶 𝘇𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗮 𝗻𝗼𝗼𝗿 𝗵𝗮𝗶 ✨",
-    "💫 𝗧𝘂𝗺𝗵𝗮𝗿𝗶 𝗮𝗮𝗻𝗸𝗵𝗼𝗻 𝗺𝗲𝗶𝗻 𝗷𝗼 𝗽𝘆𝗮𝗿 𝗵𝗮𝗶, 𝘄𝗼 𝗺𝗲𝗿𝗶 𝗱𝘂𝗻𝗶𝘆𝗮 𝗸𝗮 𝘀𝗮𝗯𝘀𝗲 𝗸𝗵𝗼𝗼𝗯𝘀𝘂𝗿𝗮𝘁 𝘀𝗮𝗴𝗮𝗿 𝗵𝗮𝗶 🌊",
-    "🔥 𝗧𝘂𝗺𝗵𝗮𝗿𝗶 𝘆𝗮𝗮𝗱 𝗵𝗮𝗿 𝗿𝗮𝗮𝘁 𝗸𝗼 𝗺𝗲𝗿𝗶 𝗻𝗲𝗲𝗻𝗱 𝗰𝗵𝗵𝗶𝗻 𝗹𝗲𝘁𝗶 𝗵𝗮𝗶 😴❤️",
-    "🎶 𝗧𝘂𝗺𝗵𝗮𝗿𝗶 𝗮𝗮𝘄𝗮𝘇 𝗺𝗲𝗿𝗶 𝘇𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗮 𝘀𝗮𝗯𝘀𝗲 𝗸𝗵𝗼𝗼𝗯𝘀𝘂𝗿𝗮𝘁 𝗴𝗮𝗮𝗻𝗮 𝗵𝗮𝗶 🎤",
-    "💝 𝗝𝗮𝗯 𝘁𝘂𝗺 𝗺𝘂𝘀𝗸𝘂𝗿𝗮𝘁𝗲 𝗵𝗼, 𝘁𝗼 𝗺𝗲𝗿𝗶 𝗱𝘂𝗻𝗶𝘆𝗮 𝗿𝗼𝘀𝗵𝗮𝗻 𝗵𝗼 𝗷𝗮𝗮𝘁𝗶 𝗵𝗮𝗶 🌍✨",
-    "🌸 𝗠𝗲𝗿𝗶 𝗵𝗮𝗿 𝗸𝗵𝘄𝗮𝗵𝗶𝘀𝗵 𝗺𝗲𝗶𝗻 𝘁𝘂𝗺𝗵𝗮𝗿𝗮 𝗱𝗮𝗮𝗺𝗮𝗻 𝗵𝗼𝗻𝗮 𝘇𝗮𝗿𝗼𝗼𝗿𝗶 𝗵𝗮𝗶 💞",
-    "🌍 𝗧𝘂 𝗺𝗲𝗿𝗶 𝗱𝘂𝗻𝗶𝘆𝗮, 𝗺𝗲𝗿𝗮 𝗮𝗮𝘀𝗺𝗮𝗮𝗻, 𝗺𝗲𝗿𝗮 𝗷𝗮𝗵𝗮𝗮𝗻 𝗵𝗮𝗶 🌌",
-    "💖 𝗛𝗮𝗿 𝗱𝗶𝗻 𝘁𝗲𝗿𝗶 𝘆𝗮𝗮𝗱 𝗺𝗲𝗶𝗻 𝗯𝗮𝘁𝗮𝘁𝗮 𝗵𝗼𝗼𝗻,\n𝗧𝘂𝗺 𝗺𝗲𝗿𝗶 𝘇𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗮 𝘀𝗮𝗯𝘀𝗲 𝗮𝗵𝗺 𝗵𝗶𝘀𝘀𝗮 𝗵𝗼 💝",
-    "🌹 𝗠𝗮𝗻𝘇𝗶𝗹 𝗸𝗼 𝗽𝗮𝗮𝗻𝗮 𝗻𝗮𝗵𝗶 𝗰𝗵𝗮𝗵𝘁𝗮,\n𝗕𝘀 𝘁𝘂𝗺𝗵𝗮𝗿𝗲 𝘀𝗮𝗮𝘁𝗵 𝘀𝗮𝗳𝗮𝗿 𝗰𝗵𝗮𝗵𝘁𝗮 𝗵𝗼𝗼𝗻 💕",
+    "💫 𝗧𝘂𝗺𝗵𝗮𝗿𝗶 𝗮𝗮𝗻𝗸𝗵𝗼𝗻 𝗺𝗲𝗶𝗻 𝗷𝗼 𝗽𝘆𝗮𝗮𝗿 𝗵𝗮𝗶, 𝘄𝗼 𝗺𝗲𝗿𝗶 𝗱𝘂𝗻𝗶𝘆𝗮 𝗸𝗮 𝘀𝗮𝗯𝘀𝗲 𝗸𝗵𝗼𝗼𝗯𝘀𝘂𝗿𝗮𝘁 𝘀𝗮𝗴𝗮𝗿 𝗵𝗮𝗶 🌊",
     "🔥 𝗧𝘂𝗺𝗵𝗮𝗿𝗮 𝗽𝘆𝗮𝗮𝗿 𝗺𝗲𝗿𝗶 𝘇𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗮 𝘀𝗮𝗯𝘀𝗲 𝗸𝗵𝗼𝗼𝗯𝘀𝘂𝗿𝗮𝘁 𝗶𝗸𝗿𝗮𝗮𝗿 𝗵𝗮𝗶 ❤️"
 ]
 
@@ -102,8 +95,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐄𝐋", url=SUPPORT_CHANNEL),
             InlineKeyboardButton("𝐆𝐑𝐎𝐔𝐏", url=SUPPORT_GROUP)
         ],
-        [InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help")],
-        [InlineKeyboardButton("𝐎𝐖𝐍𝐄𝐑", url=f"https://t.me/{OWNER_USERNAME}")]
+        [
+            InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help"),
+            InlineKeyboardButton("𝐑𝐄𝐏𝐎", callback_data="about")
+        ],
+        [
+            InlineKeyboardButton("𝐎𝐖𝐍𝐄𝐑", url=f"https://t.me/{OWNER_USERNAME}"),
+            InlineKeyboardButton("𝐀𝐛𝐨𝐮𝐭", callback_data="about_info")
+        ]
     ]
 
     caption = """┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
@@ -115,7 +114,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
  ❖ ɪ ᴄᴀɴ ʙᴏᴏsᴛ ʏᴏᴜʀ ɪᴅ ᴡɪᴛʜ ᴀɴɪᴍᴀᴛɪᴏɴ
  ❖ ᴛᴀᴘ ᴛᴏ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ᴅᴇᴛᴀɪʟs.
  •────────────────────• 
- ⚡𝗦𝗘𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘𝗡𝗧"""
+ ⚡𝗦�_E𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘�_N𝗧"""
     if WELCOME_IMAGE:
         await update.message.reply_photo(
             photo=WELCOME_IMAGE,
@@ -194,14 +193,20 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == "back":
         keyboard = [
             [
-                InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐑𝐋", url=SUPPORT_CHANNEL),
+                InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐄𝐋", url=SUPPORT_CHANNEL),
                 InlineKeyboardButton("𝐆𝐑𝐎𝐔𝐏", url=SUPPORT_GROUP)
             ],
-            [InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help")],
-            [InlineKeyboardButton("𝐎𝐖𝐍𝐄𝐑", url=f"https://t.me/{OWNER_USERNAME}")]
+            [
+                InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help"),
+                InlineKeyboardButton("𝐑𝐄𝐏𝐎", callback_data="about")
+            ],
+            [
+                InlineKeyboardButton("𝐎𝐖𝐍𝐄𝐑", url=f"https://t.me/{OWNER_USERNAME}"),
+                InlineKeyboardButton("𝐀𝐛𝐨𝐮𝐭", callback_data="about_info")
+            ]
         ]
         caption = """┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
-┆◍ ʜᴇʏ, ɪ ᴀᴍ : 𝗥𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
+┆◍ ʜᴇʏ, ɪ ᴀᴍ : �_R𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
 ┆◍ ɴɪᴄᴇ ᴛᴏ ᴍᴇᴇᴛ ʏᴏᴜ ᴅᴇᴀʀ !! 
 └────────────────────•
  ❖ ɪ ᴀᴍ ᴀ ᴘᴏᴡᴇʀғᴜʟ & ᴜsᴇғᴜʟʟ ᴜsᴇʀʙᴏᴛ.
@@ -209,7 +214,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
  ❖ ɪ ᴄᴀɴ ʙᴏᴏsᴛ ʏᴏᴜʀ ɪᴅ ᴡɪᴛʜ ᴀɴɪᴍᴀᴛɪᴏɴ
  ❖ ᴛᴀᴘ ᴛᴏ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ᴅᴇᴛᴀɪʟs.
  •────────────────────• 
-             ⚡𝗦𝗘𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘𝗡𝗧"""
+ ⚡𝗦𝗘𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘𝗡𝗧"""
         if WELCOME_IMAGE:
             await query.edit_message_media(
                 InputMediaPhoto(WELCOME_IMAGE, caption=caption),
@@ -217,6 +222,19 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
         else:
             await query.edit_message_caption(caption, reply_markup=InlineKeyboardMarkup(keyboard))
+
+    elif query.data == "about":
+        await query.answer("𝐋𝐎𝐃𝐀 𝐋𝐄𝐆𝐀 𝐁𝐒𝐃𝐊 🥴 𝐉𝐀 𝐏𝐄𝐇𝐋𝐄 𝐏𝐀𝐍𝐃𝐀 𝐊𝐎 𝐁𝐀𝐀𝐏 𝐁𝐎𝐋𝐊𝐄 𝐀𝐀 😎", show_alert=True)
+
+    elif query.data == "about_info":
+        caption = "ℹ️ **About RADHA Userbot**\n\nThis is a powerful Telegram userbot designed for fun and utility. Features include raid, spam, and love message commands. Join our support channel and group for updates and assistance!"
+        if WELCOME_IMAGE:
+            await query.edit_message_media(
+                InputMediaPhoto(WELCOME_IMAGE, caption=caption),
+                reply_markup=query.message.reply_markup
+            )
+        else:
+            await query.edit_message_caption(caption, reply_markup=query.message.reply_markup)
 
 # ----------------- Telethon Userbot -----------------
 def register_userbot_handlers(client, me):
