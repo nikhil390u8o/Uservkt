@@ -217,13 +217,14 @@ def register_userbot_handlers(client, me):
         await m.edit(f"✅ Alive as {me.first_name}")
    
     @client.on(events.NewMessage(pattern=r"\.spam(?:\s+(\d+)\s+(.+))?$"))
-    async def spam_handler(event):
-        if not event.is_reply and not event.pattern_match.group(1):
-           return await event.reply("Usage: `.spam <count> <message>` (e.g., `.spam 5 Hello!`)")
+async def spam_handler(event):
+    """Send a custom message multiple times. Usage: .spam <count> <message>"""
+    if not event.pattern_match.group(1):
+        return await event.reply("Usage: `.spam <count> <message>` (e.g., `.spam 5 Hello!`)")
     
-        args = event.pattern_match.group(1), event.pattern_match.group(2)
-        if not all(args):
-            return await event.reply("Please provide both a count and a message.")
+    args = event.pattern_match.group(1), event.pattern_match.group(2)
+    if not all(args):
+        return await event.reply("Please provide both a count and a message.")
     
     try:
         count = min(int(args[0]), 10)  # Limit to 10 messages to avoid bans
@@ -233,7 +234,7 @@ def register_userbot_handlers(client, me):
         
         for _ in range(count):
             await event.respond(message)
-            await asyncio.sleep(0.0)  # 0.5-second delay to avoid flood limits
+            await asyncio.sleep(0.5)  # 0.5-second delay to avoid flood limits
         await event.reply(f"✅ Sent {count} messages.")
     except ValueError:
         await event.reply("Invalid count. Please provide a number (e.g., `.spam 5 Hello!`).")
