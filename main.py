@@ -205,7 +205,7 @@ def register_userbot_handlers(client, me):
         await event.respond(f"✅ {me.first_name} is online.")
         
         @client.on(events.NewMessage(pattern=r"\.love(?:\s+\d+)?"))
-    async def love_handler(event):
+        async def love_handler(event):
         if not event.is_reply:
             return await event.reply("Reply to a message with `.love <count>`")
         reply_msg = await event.get_reply_message()
