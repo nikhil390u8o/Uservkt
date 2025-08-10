@@ -223,7 +223,7 @@ def register_userbot_handlers(client, me):
     
         args = event.pattern_match.group(1), event.pattern_match.group(2)
         if not all(args):
-        return await event.reply("Please provide both a count and a message.")
+            return await event.reply("Please provide both a count and a message.")
     
     try:
         count = min(int(args[0]), 10)  # Limit to 10 messages to avoid bans
