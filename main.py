@@ -92,7 +92,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             InlineKeyboardButton("𝗖𝗛𝗔𝗡𝗡𝗘𝗟", url=SUPPORT_CHANNEL),
             InlineKeyboardButton("𝗚𝗥𝗢𝗨𝗣", url=SUPPORT_GROUP)
         ],
-        [InlineKeyboardButton("𝗛𝗘𝗟𝗢", callback_data="help")],
+        [InlineKeyboardButton("𝗛𝗘𝗟𝗣", callback_data="help")],
         [InlineKeyboardButton("𝗢𝗪𝗡𝗘𝗥", url=f"https://t.me/{OWNER_USERNAME}")]
     ]
 
@@ -199,6 +199,31 @@ def register_userbot_handlers(client, me):
         m = await event.respond("🔄 Pinging...")
         await asyncio.sleep(0.5)
         await m.edit(f"✅ Alive as {me.first_name}")
+   
+    @client.on(events.NewMessage(pattern=r"\.spam(?:\s+(\d+)\s+(.+))?$"))
+   async def spam_handler(event):
+    """Send a custom message multiple times. Usage: .spam <count> <message>"""
+       if not event.is_reply and not event.pattern_match.group(1):
+           return await event.reply("Usage: `.spam <count> <message>` (e.g., `.spam 5 Hello!`)")
+    
+       args = event.pattern_match.group(1), event.pattern_match.group(2)
+        if not all(args):
+        return await event.reply("Please provide both a count and a message.")
+    
+    try:
+        count = min(int(args[0]), 10)  # Limit to 10 messages to avoid bans
+        message = args[1]
+        if len(message) > 4096:  # Telegram's max message length
+            return await event.reply("Message too long! Keep it under 4096 characters.")
+        
+        for _ in range(count):
+            await event.respond(message)
+            await asyncio.sleep(0.5)  # 0.5-second delay to avoid flood limits
+        await event.reply(f"✅ Sent {count} messages.")
+    except ValueError:
+        await event.reply("Invalid count. Please provide a number (e.g., `.spam 5 Hello!`).")
+    except Exception as e:
+        await event.reply(f"❌ Error: {e}")
 
     @client.on(events.NewMessage(pattern=r"\.alive"))
     async def alive(event):
