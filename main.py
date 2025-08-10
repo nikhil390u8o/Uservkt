@@ -100,8 +100,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             InlineKeyboardButton("𝐑𝐄𝐏𝐎", callback_data="about")
         ],
         [
-            InlineKeyboardButton("𝐎𝐖𝐍𝐄𝐑", url=f"https://t.me/{OWNER_USERNAME}"),
-            InlineKeyboardButton("𝐀𝐛𝐨𝐮𝐭", callback_data="about_info")
+            InlineKeyboardButton("𝐃𝐄𝐕", url=f"https://t.me/{OWNER_USERNAME}"),
+            InlineKeyboardButton("𝐀𝐁𝐎𝐔𝐓", callback_data="about_info")
         ]
     ]
 
@@ -152,9 +152,9 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
 :⧽ ᴄᴩᴜ : 28.3%
 :⧽ ᴅɪsᴋ : 25.9%""", reply_markup=InlineKeyboardMarkup(keyboard))
     else:
-        msg = await update.message.reply_text("🔄 Pinging...", reply_markup=InlineKeyboardMarkup(keyboard))
+        msg = await update.message.reply_text("🔄 ᴘɪɴɢɪɴɢ...", reply_markup=InlineKeyboardMarkup(keyboard))
         await asyncio.sleep(0.2)
-        await msg.edit_text("✅ Pong!", reply_markup=InlineKeyboardMarkup(keyboard))
+        await msg.edit_text("✅ 𝗣𝗢𝗡𝗚!!", reply_markup=InlineKeyboardMarkup(keyboard))
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle button clicks."""
@@ -166,7 +166,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("𝐒𝐓𝐎𝐏 𝐁𝐎𝐓", callback_data="stop")],
             [InlineKeyboardButton("𝐁𝐀𝐂𝐊", callback_data="back")]
         ]
-        caption = "ʜᴇʀᴇ ᴀʀᴇ sᴏᴍᴇ ᴄᴏᴍᴍᴀɴᴅs:\n [ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs /ping, /status] \n [ᴄʟɪᴇɴᴛ ᴄᴏᴍᴍᴀɴᴅs .ping, .alive, .love, .spam, .raid]"
+        caption = "ʜᴇʀᴇ ᴀʀᴇ sᴏᴍᴇ ᴄᴏᴍᴍᴀɴᴅs:\n\n [ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs  /ping, /status]\n\n [ᴄʟɪᴇɴᴛ ᴄᴏᴍᴍᴀɴᴅs  .ping, .alive, .love, .spam, .raid]"
         if GIRL_IMAGE:
             await query.edit_message_media(
                 InputMediaPhoto(GIRL_IMAGE, caption=caption),
