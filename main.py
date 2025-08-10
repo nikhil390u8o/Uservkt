@@ -57,14 +57,23 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     keyboard = [
         [
-            InlineKeyboardButton("Channel", url=SUPPORT_CHANNEL),
-            InlineKeyboardButton("Group", url=SUPPORT_GROUP)
+            InlineKeyboardButton("𝗖𝗛𝗔𝗡𝗡𝗘𝗟", url=SUPPORT_CHANNEL),
+            InlineKeyboardButton("𝗚𝗥𝗢𝗨𝗣", url=SUPPORT_GROUP)
         ],
-        [InlineKeyboardButton("Help", callback_data="help")],
-        [InlineKeyboardButton("Owner", url=f"https://t.me/{OWNER_USERNAME}")]
+        [InlineKeyboardButton("𝗛𝗘𝗟𝗢", callback_data="help")],
+        [InlineKeyboardButton("𝗢𝗪𝗡𝗘𝗥", url=f"https://t.me/{OWNER_USERNAME}")]
     ]
 
-    caption = "Hello! 👋\n\nSend me your Telethon String Session to boot your userbot."
+    caption = """┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
+┆◍ ʜᴇʏ, ɪ ᴀᴍ : 𝗥𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
+┆◍ ɴɪᴄᴇ ᴛᴏ ᴍᴇᴇᴛ ʏᴏᴜ ᴅᴇᴀʀ !! 
+└────────────────────•
+ ❖ ɪ ᴀᴍ ᴀ ᴘᴏᴡᴇʀғᴜʟ & ᴜsᴇғᴜʟʟ ᴜsᴇʀʙᴏᴛ.
+ ❖ ʏᴏᴜ ᴄᴀɴ ᴜsᴇ ᴍᴇ ғᴏʀ ғᴜɴ ʀᴀɪᴅ sᴘᴀᴍ.
+ ❖ ɪ ᴄᴀɴ ʙᴏᴏsᴛ ʏᴏᴜʀ ɪᴅ ᴡɪᴛʜ ᴀɴɪᴍᴀᴛɪᴏɴ
+ ❖ ᴛᴀᴘ ᴛᴏ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ᴅᴇᴛᴀɪʟs.
+ •────────────────────• """
+            "⚡𝗦𝗘𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘𝗡𝗧"
     if WELCOME_IMAGE:
         await update.message.reply_photo(
             photo=WELCOME_IMAGE,
@@ -89,10 +98,16 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if query.data == "help":
         keyboard = [
-            [InlineKeyboardButton("Stop Bot", callback_data="stop")],
-            [InlineKeyboardButton("Go Back", callback_data="back")]
+            [InlineKeyboardButton("𝗦𝗧𝗢𝗣 𝗕𝗢𝗧", callback_data="stop")],
+            [InlineKeyboardButton("𝗕𝗔𝗖𝗞", callback_data="back")]
         ]
-        caption = "Commands: .ping, .alive, .love, .raid (if configured), /status"
+        caption = """"┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
+┆◍ ʜᴇʏ, ɪ ᴀᴍ : 𝗥𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
+┆◍ ɴɪᴄᴇ ᴛᴏ ᴍᴇᴇᴛ ʏᴏᴜ ᴅᴇᴀʀ !! 
+└────────────────────•            ʜᴇʀᴇ ᴀʀᴇ ᴛʜᴇ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs ғᴏʀ ᴄʟɪᴇɴᴛ
+.ping
+.alive
+.love"""
         if GIRL_IMAGE:
             await query.edit_message_media(
                 InputMediaPhoto(GIRL_IMAGE, caption=caption),
@@ -121,13 +136,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == "back":
         keyboard = [
             [
-                InlineKeyboardButton("Channel", url=SUPPORT_CHANNEL),
-                InlineKeyboardButton("Group", url=SUPPORT_GROUP)
+                InlineKeyboardButton("𝗖𝗛𝗔𝗡𝗡𝗘𝗟", url=SUPPORT_CHANNEL),
+                InlineKeyboardButton("𝗚𝗥𝗢𝗨𝗟", url=SUPPORT_GROUP)
             ],
-            [InlineKeyboardButton("Help", callback_data="help")],
-            [InlineKeyboardButton("Owner", url=f"https://t.me/{OWNER_USERNAME}")]
+            [InlineKeyboardButton("𝗛𝗥𝗟𝗣", callback_data="help")],
+            [InlineKeyboardButton("𝗢𝗪𝗡𝗘𝗥", url=f"https://t.me/{OWNER_USERNAME}")]
         ]
-        caption = "Send your Telethon String Session to start."
+        caption = "sᴇɴᴅ ʏᴏᴜʀ ᴛᴇʟᴇᴛʜᴏɴ sᴛʀɪɴɢ sᴇssɪᴏɴ ᴛᴏ ʙᴏᴏᴛ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ"
         if WELCOME_IMAGE:
             await query.edit_message_media(
                 InputMediaPhoto(WELCOME_IMAGE, caption=caption),
@@ -204,7 +219,7 @@ async def receive_string(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     text = update.message.text.strip()
-    msg = await update.message.reply_text("🔄 Processing your string session...")
+    msg = await update.message.reply_text("🔄 ʙᴏᴏᴛɪɴɢ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ ᴡᴀɪᴛ...")
     waiting_for_string.discard(user_id)
 
     if user_id in userbots:
@@ -223,9 +238,9 @@ async def receive_string(update: Update, context: ContextTypes.DEFAULT_TYPE):
         client, task = await start_telethon_client_for_user(text, user_id, context.bot)
         userbots[user_id] = client
         userbot_tasks[user_id] = task
-        await msg.edit_text(f"✅ Your userbot is connected as: {(await client.get_me()).first_name}")
+        await msg.edit_text(f"✅ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ ᴡᴀs ʙᴏᴏᴛᴇᴅ sᴜᴄsᴇssғᴜʟʟʏ: {(await client.get_me()).first_name}")
     except Exception as e:
-        await msg.edit_text(f"❌ Failed to start userbot: {e}")
+        await msg.edit_text(f"❌ ғᴀʟɪᴇᴅ ᴛᴏ sᴛᴀʀᴛ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ: {e}")
 
 # ----------------- Keep-alive Web Server -----------------
 async def handle(request):
