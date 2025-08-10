@@ -221,7 +221,7 @@ def register_userbot_handlers(client, me):
         if not event.is_reply and not event.pattern_match.group(1):
            return await event.reply("Usage: `.spam <count> <message>` (e.g., `.spam 5 Hello!`)")
     
-       args = event.pattern_match.group(1), event.pattern_match.group(2)
+        args = event.pattern_match.group(1), event.pattern_match.group(2)
         if not all(args):
         return await event.reply("Please provide both a count and a message.")
     
