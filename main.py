@@ -206,17 +206,17 @@ def register_userbot_handlers(client, me):
         
         @client.on(events.NewMessage(pattern=r"\.love(?:\s+\d+)?"))
         async def love_handler(event):
-        if not event.is_reply:
-            return await event.reply("Reply to a message with `.love <count>`")
-        reply_msg = await event.get_reply_message()
-        user = await reply_msg.get_sender()
-        mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
-        args = event.raw_text.split()
-        count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
-        for i in range(count):
-            text = love_messages[i % len(love_messages)]
-            await event.respond(f"{mention}, {text}", parse_mode="html")
-            await asyncio.sleep(1)
+            if not event.is_reply:
+                return await event.reply("Reply to a message with `.love <count>`")
+            reply_msg = await event.get_reply_message()
+            user = await reply_msg.get_sender()
+            mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
+            args = event.raw_text.split()
+            count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
+            for i in range(count):
+                text = love_messages[i % len(love_messages)]
+                await event.respond(f"{mention}, {text}", parse_mode="html")
+                await asyncio.sleep(1)
 
     @client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
     async def love_handler(event):
