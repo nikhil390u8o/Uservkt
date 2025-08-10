@@ -234,7 +234,7 @@ def register_userbot_handlers(client, me):
         
         for _ in range(count):
             await event.respond(message)
-            await asyncio.sleep(0.5)  # 0.5-second delay to avoid flood limits
+            await asyncio.sleep(0.0)  # 0.5-second delay to avoid flood limits
         await event.reply(f"✅ Sent {count} messages.")
     except ValueError:
         await event.reply("Invalid count. Please provide a number (e.g., `.spam 5 Hello!`).")
@@ -257,7 +257,7 @@ def register_userbot_handlers(client, me):
             for i in range(count):
                 text = love_messages[i % len(love_messages)]
                 await event.respond(f"{mention}, {text}", parse_mode="html")
-                await asyncio.sleep(1)
+                await asyncio.sleep(0)
 
     @client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
     async def love_handler(event):
@@ -271,7 +271,7 @@ def register_userbot_handlers(client, me):
         for i in range(count):
             text = love_messages[i % len(love_messages)]
             await event.respond(f"{mention}, {text}", parse_mode="html")
-            await asyncio.sleep(1)
+            await asyncio.sleep(0)
 
 async def start_telethon_client_for_user(string_session: str, user_id: int, context_bot):
     try:
