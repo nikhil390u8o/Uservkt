@@ -137,18 +137,22 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle the /ping command with image, message editing, and support channel button."""
-    keyboard = [[InlineKeyboardButton("Support Channel", url=SUPPORT_CHANNEL)]] if SUPPORT_CHANNEL else []
+    keyboard = [[InlineKeyboardButton("𝗦𝗨𝗣𝗣𝗢𝗥𝗧", url=SUPPORT_CHANNEL)]] if SUPPORT_CHANNEL else []
     if PING_IMAGE_URL:
         msg = await update.message.reply_photo(
             photo=PING_IMAGE_URL,
             caption="🔄 Pinging...",
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
-        await asyncio.sleep(0.1)
-        await msg.edit_caption(caption="✅ Pong!", reply_markup=InlineKeyboardMarkup(keyboard))
+        await asyncio.sleep(0.2)
+        await msg.edit_caption(caption=""""✅ 𝗣𝗢𝗡𝗚!!\n ʜᴇʏ ᴛʜᴇʀᴇ ɪ ᴀᴍ ᴀʟɪᴠᴇ\n ➻ sʏsᴛᴇᴍ sᴛᴀᴛs :
+:⧽ ᴜᴩᴛɪᴍᴇ : 6ʜ:14ᴍ:38s
+:⧽ ʀᴀᴍ : 45.4%
+:⧽ ᴄᴩᴜ : 28.3%
+:⧽ ᴅɪsᴋ : 25.9% """"", reply_markup=InlineKeyboardMarkup(keyboard))
     else:
         msg = await update.message.reply_text("🔄 Pinging...", reply_markup=InlineKeyboardMarkup(keyboard))
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.2)
         await msg.edit_text("✅ Pong!", reply_markup=InlineKeyboardMarkup(keyboard))
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
