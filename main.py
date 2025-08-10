@@ -72,8 +72,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
  ❖ ʏᴏᴜ ᴄᴀɴ ᴜsᴇ ᴍᴇ ғᴏʀ ғᴜɴ ʀᴀɪᴅ sᴘᴀᴍ.
  ❖ ɪ ᴄᴀɴ ʙᴏᴏsᴛ ʏᴏᴜʀ ɪᴅ ᴡɪᴛʜ ᴀɴɪᴍᴀᴛɪᴏɴ
  ❖ ᴛᴀᴘ ᴛᴏ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ᴅᴇᴛᴀɪʟs.
- •────────────────────• """
-            "⚡𝗦𝗘𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘𝗡𝗧"
+ •────────────────────• 
+ ⚡𝗦𝗘𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘𝗡𝗧"""
     if WELCOME_IMAGE:
         await update.message.reply_photo(
             photo=WELCOME_IMAGE,
