@@ -1,13 +1,19 @@
+# -*- coding: utf-8 -*-
 import os
 import warnings
 import asyncio
 import signal
+import logging
 from dotenv import load_dotenv
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ContextTypes, filters
 from aiohttp import web
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
 # Suppress deprecated pkg_resources warning
 warnings.filterwarnings("ignore", message="pkg_resources is deprecated")
@@ -23,11 +29,12 @@ try:
     if not all([API_ID, API_HASH, BOT_TOKEN]):
         raise ValueError("API_ID, API_HASH, or BOT_TOKEN is missing")
 except (ValueError, TypeError) as e:
-    raise ValueError(f"Invalid environment variable: {e}")
+    logger.error(f"Invalid environment variable: {e}")
+    raise
 
 WELCOME_IMAGE = os.getenv("WELCOME_IMAGE_URL") or None
 GIRL_IMAGE = os.getenv("GIRL_IMAGE_URL") or None
-PING_IMAGE_URL = os.getenv("PING_IMAGE_URL") or None 
+PING_IMAGE_URL = os.getenv("PING_IMAGE_URL") or None
 try:
     OWNER_ID = int(os.getenv("OWNER_ID", "0"))
 except (ValueError, TypeError):
@@ -42,8 +49,26 @@ userbots = {}
 userbot_tasks = {}
 waiting_for_string = set()
 
+raid_messages = [
+    "𝗧𝗘𝗥𝗜 𝗕𝗔𝗛𝗘𝗡 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧 𝗠𝗘𝗜 𝗕𝗔𝗥𝗚𝗔𝗗 𝗞𝗔 𝗣𝗘𝗗 𝗨𝗚𝗔 𝗗𝗨𝗡𝗚𝗔𝗔 𝗖𝗢𝗥𝗢𝗡𝗔 𝗠𝗘𝗜 𝗦𝗔𝗕 𝗢𝗫𝗬𝗚𝗘𝗡 𝗟𝗘𝗞𝗔𝗥 𝗝𝗔𝗬𝗘𝗡𝗚𝗘🤢🤩🥳", 
+    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧 𝗠𝗘 𝗖𝗛𝗔𝗡𝗚𝗘𝗦 𝗖𝗢𝗠𝗠𝗜𝗧 𝗞𝗥𝗨𝗚𝗔 𝗙𝗜𝗥 𝗧𝗘𝗥𝗜 𝗕𝗛𝗘𝗘𝗡 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧 𝗔𝗨𝗧𝗢𝗠𝗔𝗧𝗜𝗖𝗔𝗟𝗟𝗬 𝗨𝗣𝗗𝗔𝗧𝗘 𝗛𝗢𝗝𝗔𝗔𝗬𝗘𝗚𝗜🤖🙏🤔", 
+    "𝗧𝗘𝗥𝗜 𝗩𝗔𝗛𝗘𝗘𝗡 𝗗𝗛𝗔𝗡𝗗𝗛𝗘 𝗩𝗔𝗔𝗟𝗜 😋😛", 
+    "𝗝𝗨𝗡𝗚𝗟𝗘 𝗠𝗘 𝗡𝗔𝗖𝗛𝗧𝗔 𝗛𝗘 𝗠𝗢𝗥𝗘 𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗞𝗜 𝗖𝗛𝗨𝗗𝗔𝗜 𝗗𝗘𝗞𝗞𝗘 𝗦𝗔𝗕 𝗕𝗢𝗟𝗧𝗘 𝗢𝗡𝗖𝗘 𝗠𝗢𝗥𝗘 𝗢𝗡𝗖𝗘 𝗠𝗢𝗥𝗘 🤣🤣💦💋", 
+    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧𝗛 𝗙𝗔𝗔𝗗𝗞𝗘 𝗥𝗔𝗞𝗗𝗜𝗔 𝗠𝗔‌𝗔‌𝗞𝗘 𝗟𝗢𝗗𝗘 𝗝𝗔𝗔 𝗔𝗕𝗕 𝗦𝗜𝗟𝗪𝗔𝗟𝗘 👄👄", 
+    "𝗖𝗛𝗔𝗟 𝗕𝗘𝗧𝗔 𝗧𝗨𝗝𝗛𝗘 𝗠𝗔‌𝗔‌𝗙 𝗞𝗜𝗔 🤣 𝗔𝗕𝗕 𝗔𝗣𝗡𝗜 𝗚𝗙 𝗞𝗢 𝗕𝗛𝗘𝗝", 
+    "𝗧𝗘𝗥𝗜 𝗚𝗙 𝗞𝗢 𝗘𝗧𝗡𝗔 𝗖𝗛𝗢𝗗𝗔 𝗕𝗘‌𝗛𝗘𝗡 𝗞𝗘 𝗟𝗢𝗗𝗘 𝗧𝗘𝗥𝗜 𝗚𝗙 𝗧𝗢 𝗠𝗘𝗥𝗜 𝗥Æ𝗡𝗗𝗜 𝗕𝗔𝗡𝗚𝗔𝗬𝗜 𝗔𝗕𝗕 𝗖𝗛𝗔𝗟 𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗞𝗢 𝗖𝗛𝗢𝗗𝗧𝗔 𝗙𝗜𝗥𝗦𝗘 ♥️💦😆😆😆😆", 
+    "𝗦𝗨𝗡 𝗠𝗔‌𝗔‌𝗗𝗔𝗥𝗖𝗛Ø𝗗 𝗝𝗬𝗔𝗗𝗔 𝗡𝗔 𝗨𝗖𝗛𝗔𝗟 𝗠𝗔‌𝗔‌ 𝗖𝗛𝗢𝗗 𝗗𝗘𝗡𝗚𝗘 𝗘𝗞 𝗠𝗜𝗡 𝗠𝗘𝗜 ✅🤣🔥🤩", 
+    "𝗧𝗘𝗥𝗜 𝗕𝗘𝗛𝗡 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧 𝗠𝗘 𝗞𝗘𝗟𝗘 𝗞𝗘 𝗖𝗛𝗜𝗟𝗞𝗘 🤤🤤", 
+    "𝗧𝗘𝗥𝗜 𝗕𝗔𝗛𝗘𝗡 𝗞𝗜 𝗚𝗔𝗔𝗡𝗗 𝗠𝗘𝗜 𝗢𝗡𝗘𝗣𝗟𝗨𝗦 𝗞𝗔 𝗪𝗥𝗔𝗣 𝗖𝗛𝗔𝗥𝗚𝗘𝗥 30𝗪 𝗛𝗜𝗚𝗛 𝗣𝗢𝗪𝗘𝗥 💥😂😎", 
+    "𝗔𝗥𝗘 𝗥𝗘 𝗠𝗘𝗥𝗘 𝗕𝗘𝗧𝗘 𝗞𝗬𝗢𝗨𝗡 𝗦𝗣𝗘𝗘𝗗 𝗣𝗔𝗞𝗔𝗗 𝗡𝗔 𝗣𝗔𝗔𝗔 𝗥𝗔𝗛𝗔 𝗔𝗣𝗡𝗘 𝗕𝗔𝗔𝗣 𝗞𝗔 𝗛𝗔𝗛𝗔𝗛🤣🤣", 
+    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗔𝗞𝗜 𝗖𝗛𝗨𝗗𝗔𝗜 𝗞𝗢 𝗣𝗢𝗥𝗡𝗛𝗨𝗕.𝗖𝗢𝗠 𝗣𝗘 𝗨𝗣𝗟𝗢𝗔𝗗 𝗞𝗔𝗥𝗗𝗨𝗡𝗚𝗔 𝗦𝗨𝗔𝗥 𝗞𝗘 𝗖𝗛𝗢𝗗𝗘 🤣💋💦", 
+    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗘 𝗕𝗛𝗢𝗦𝗗𝗘 𝗠𝗘𝗜 𝗚𝗜𝗧𝗛𝗨𝗕 𝗗𝗔𝗟 𝗞𝗘 𝗔𝗣𝗡𝗔 𝗕𝗢𝗧 𝗛𝗢𝗦𝗧 𝗞𝗔𝗥𝗨𝗡𝗚𝗔𝗔 🤩👊👤😍", 
+    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗜 𝗖😂𝗛𝗨𝗨‌𝗧 𝗞𝗔𝗞𝗧𝗘 🤱 𝗚𝗔𝗟𝗜 𝗞𝗘 𝗞𝗨𝗧𝗧𝗢 🦮 𝗠𝗘 𝗕𝗔𝗔𝗧 𝗗𝗨𝗡𝗚𝗔 𝗣𝗛𝗜𝗥 🍞 𝗕𝗥𝗘𝗔𝗗 𝗞𝗜 𝗧𝗔𝗥𝗛 𝗞𝗛𝗔𝗬𝗘𝗡𝗚𝗘 𝗪𝗢 𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧", 
+    "𝗧𝗘𝗥𝗜 𝗥Æ𝗡𝗗𝗜 𝗠𝗔‌𝗔‌ 𝗦𝗘 𝗣𝗨𝗖𝗛𝗡𝗔 𝗕𝗔𝗔𝗣 𝗞𝗔 𝗡𝗔𝗔𝗠 𝗕𝗔𝗛𝗘𝗡 𝗞𝗘 𝗟𝗢𝗗𝗘𝗘𝗘𝗘𝗘 🤩🥳😳", 
+    "𝗧𝗘𝗥𝗔 𝗕𝗔𝗔𝗣 𝗝𝗢𝗛𝗡𝗬 𝗦𝗜𝗡𝗦 𝗖𝗜𝗥𝗖𝗨𝗦 𝗞𝗔𝗬 𝗕𝗛𝗢𝗦𝗗𝗘 𝗝𝗢𝗞𝗘𝗥 𝗞𝗜 𝗖𝗛𝗜𝗗𝗔𝗔𝗦 𝟭𝟰 𝗟𝗨𝗡𝗗 𝗞𝗜 𝗗𝗛𝗔𝗔𝗥 𝗧𝗘𝗥𝗜 𝗠𝗨𝗠𝗠𝗬 𝗞𝗜 𝗖𝗛𝗨𝗧 𝗠𝗔𝗜 𝟮𝟬𝟬 𝗜𝗡𝗖𝗛 𝗞𝗔 𝗟𝗨𝗡𝗗"
+]
 love_messages = [
-   "💖 𝗠𝗼𝗵𝗮𝗯𝗯𝗮𝘁 𝗸𝗮 𝗷𝘂𝗻𝗼𝗼𝗻 𝘀𝗶𝗿𝗳 𝘂𝗻𝗸𝗼 𝗵𝗼𝘁𝗮 𝗵𝗮𝗶\n𝗝𝗶𝗻𝗵𝗲 𝗽𝘆𝗮𝗮𝗿 𝗸𝗶 𝗸𝗮𝗱𝗮𝗿 𝗵𝗼𝘁𝗶 𝗵𝗮𝗶 💕",
+    "💖 𝗠𝗼𝗵𝗮𝗯𝗯𝗮𝘁 𝗸𝗮 𝗷𝘂𝗻𝗼𝗼𝗻 𝘀𝗶𝗿𝗳 𝘂𝗻𝗸𝗼 𝗵𝗼𝘁𝗮 𝗵𝗮𝗶\n𝗝𝗶𝗻𝗵𝗲 𝗽𝘆𝗮𝗮𝗿 𝗸𝗶 𝗸𝗮𝗱𝗮𝗿 𝗵𝗼𝘁𝗶 𝗵𝗮𝗶 💕",
     "🌙 𝗖𝗵𝗮𝗻𝗱𝗻𝗶 𝗿𝗮𝗮𝘁 𝗺𝗲𝗶𝗻 𝘁𝗲𝗿𝗶 𝘆𝗮𝗮𝗱𝗼𝗻 𝗸𝗮 𝗷𝗮𝗱𝗼𝗼 𝗵𝗮𝗶,\n𝗗𝗶𝗹 𝗸𝗲 𝗵𝗮𝗿 𝗸𝗼𝗻𝗲 𝗺𝗲𝗶𝗻 𝘀𝗶𝗿𝗳 𝘁𝗲𝗿𝗮 𝗵𝗶 𝗮𝗮𝘀𝗵𝗶𝘆𝗮𝗮𝗻𝗮 𝗵𝗮𝗶 💫",
     "❤️ 𝗭𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗲 𝘀𝗮𝗳𝗮𝗿 𝗺𝗲𝗶𝗻 𝗺𝗶𝗹𝘁𝗶 𝗿𝗮𝗵𝗲 𝘁𝗲𝗿𝗶 𝗺𝘂𝘀𝗸𝗮𝗮𝗻,\n𝗬𝗮𝗵𝗶 𝗵𝗮𝗶 𝗺𝗲𝗿𝗶 𝗱𝘂𝗮 𝗵𝗮𝗿 𝘀𝘂𝗯𝗮𝗵 𝗮𝘂𝗿 𝘀𝗵𝗮𝗮𝗺 💝",
     "💌 𝗛𝗮𝗿 𝘀𝗵𝗮𝘆𝗮𝗿𝗶 𝘁𝗲𝗿𝗶 𝘆𝗮𝗮𝗱 𝗺𝗲𝗶𝗻 𝗹𝗶𝗸𝗵𝘁𝗮 𝗵𝗼𝗼𝗻,\n𝗧𝘂 𝗺𝗲𝗿𝗶 𝗺𝗼𝗵𝗮𝗯𝗯𝗮𝘁, 𝘁𝘂 𝗺𝗲𝗿𝗮 𝗮𝗿𝗺𝗮𝗮𝗻 𝗵𝗮𝗶 💖",
@@ -63,38 +88,22 @@ love_messages = [
     "💖 𝗛𝗮𝗿 𝗱𝗶𝗻 𝘁𝗲𝗿𝗶 𝘆𝗮𝗮𝗱 𝗺𝗲𝗶𝗻 𝗯𝗮𝘁𝗮𝘁𝗮 𝗵𝗼𝗼𝗻,\n𝗧𝘂𝗺 𝗺𝗲𝗿𝗶 𝘇𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗮 𝘀𝗮𝗯𝘀𝗲 𝗮𝗵𝗺 𝗵𝗶𝘀𝘀𝗮 𝗵𝗼 💝",
     "🌹 𝗠𝗮𝗻𝘇𝗶𝗹 𝗸𝗼 𝗽𝗮𝗮𝗻𝗮 𝗻𝗮𝗵𝗶 𝗰𝗵𝗮𝗵𝘁𝗮,\n𝗕𝘀 𝘁𝘂𝗺𝗵𝗮𝗿𝗲 𝘀𝗮𝗮𝘁𝗵 𝘀𝗮𝗳𝗮𝗿 𝗰𝗵𝗮𝗵𝘁𝗮 𝗵𝗼𝗼𝗻 💕",
     "🔥 𝗧𝘂𝗺𝗵𝗮𝗿𝗮 𝗽𝘆𝗮𝗮𝗿 𝗺𝗲𝗿𝗶 𝘇𝗶𝗻𝗱𝗮𝗴𝗶 𝗸𝗮 𝘀𝗮𝗯𝘀𝗲 𝗸𝗵𝗼𝗼𝗯𝘀𝘂𝗿𝗮𝘁 𝗶𝗸𝗿𝗮𝗮𝗿 𝗵𝗮𝗶 ❤️"
-]    
-raid_messages = [
-    "𝗧𝗘𝗥𝗜 𝗕𝗔𝗛𝗘𝗡 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧 𝗠𝗘𝗜 𝗕𝗔𝗥𝗚𝗔𝗗 𝗞𝗔 𝗣𝗘𝗗 𝗨𝗚𝗔 𝗗𝗨𝗡𝗚𝗔𝗔 𝗖𝗢𝗥𝗢𝗡𝗔 𝗠𝗘𝗜 𝗦𝗔𝗕 𝗢𝗫𝗬𝗚𝗘𝗡 𝗟𝗘𝗞𝗔𝗥 𝗝𝗔𝗬𝗘𝗡𝗚𝗘🤢🤩🥳", 
-    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧 𝗠𝗘 𝗖𝗛𝗔𝗡𝗚𝗘𝗦 𝗖𝗢𝗠𝗠𝗜𝗧 𝗞𝗥𝗨𝗚𝗔 𝗙𝗜𝗥 𝗧𝗘𝗥𝗜 𝗕𝗛𝗘𝗘𝗡 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧 𝗔𝗨𝗧𝗢𝗠𝗔𝗧𝗜𝗖𝗔𝗟𝗟𝗬 𝗨𝗣𝗗𝗔𝗧𝗘 𝗛𝗢𝗝𝗔𝗔𝗬𝗘𝗚𝗜🤖🙏🤔", 
-    "𝗧𝗘𝗥𝗜 𝗩𝗔𝗛𝗘𝗘𝗡 𝗗𝗛𝗔𝗡𝗗𝗛𝗘 𝗩𝗔𝗔𝗟𝗜 😋😛", 
-    "𝗝𝗨𝗡𝗚𝗟𝗘 𝗠𝗘 𝗡𝗔𝗖𝗛𝗧𝗔 𝗛𝗘 𝗠𝗢𝗥𝗘 𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗞𝗜 𝗖𝗛𝗨𝗗𝗔𝗜 𝗗𝗘𝗞𝗞𝗘 𝗦𝗔𝗕 𝗕𝗢𝗟𝗧𝗘 𝗢𝗡𝗖𝗘 𝗠𝗢𝗥𝗘 𝗢𝗡𝗖𝗘 𝗠𝗢𝗥𝗘 🤣🤣💦💋", 
-    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧𝗛 𝗙𝗔𝗔𝗗𝗞𝗘 𝗥𝗔𝗞𝗗𝗜𝗔 𝗠𝗔‌𝗔‌𝗞𝗘 𝗟𝗢𝗗𝗘 𝗝𝗔𝗔 𝗔𝗕𝗕 𝗦𝗜𝗟𝗪𝗔𝗟𝗘 👄👄", 
-    "𝗖𝗛𝗔𝗟 𝗕𝗘𝗧𝗔 𝗧𝗨𝗝𝗛𝗘 𝗠𝗔‌𝗔‌𝗙 𝗞𝗜𝗔 🤣 𝗔𝗕𝗕 𝗔𝗣𝗡𝗜 𝗚𝗙 𝗞𝗢 𝗕𝗛𝗘𝗝", "𝗧𝗘𝗥𝗜 𝗚𝗙 𝗞𝗢 𝗘𝗧𝗡𝗔 𝗖𝗛𝗢𝗗𝗔 𝗕𝗘‌𝗛𝗘𝗡 𝗞𝗘 𝗟𝗢𝗗𝗘 𝗧𝗘𝗥𝗜 𝗚𝗙 𝗧𝗢 𝗠𝗘𝗥𝗜 𝗥Æ𝗡𝗗𝗜 𝗕𝗔𝗡𝗚𝗔𝗬𝗜 𝗔𝗕𝗕 𝗖𝗛𝗔𝗟 𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗞𝗢 𝗖𝗛𝗢𝗗𝗧𝗔 𝗙𝗜𝗥𝗦𝗘 ♥️💦😆😆😆😆", 
-    "𝗦𝗨𝗡 𝗠𝗔‌𝗔‌𝗗𝗔𝗥𝗖𝗛Ø𝗗 𝗝𝗬𝗔𝗗𝗔 𝗡𝗔 𝗨𝗖𝗛𝗔𝗟 𝗠𝗔‌𝗔‌ 𝗖𝗛𝗢𝗗 𝗗𝗘𝗡𝗚𝗘 𝗘𝗞 𝗠𝗜𝗡 𝗠𝗘𝗜 ✅🤣🔥🤩", 
-    "𝗧𝗘𝗥𝗜 𝗕𝗘𝗛𝗡 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧 𝗠𝗘 𝗞𝗘𝗟𝗘 𝗞𝗘 𝗖𝗛𝗜𝗟𝗞𝗘 🤤🤤", 
-    "𝗧𝗘𝗥𝗜 𝗕𝗔𝗛𝗘𝗡 𝗞𝗜 𝗚𝗔𝗔𝗡𝗗 𝗠𝗘𝗜 𝗢𝗡𝗘𝗣𝗟𝗨𝗦 𝗞𝗔 𝗪𝗥𝗔𝗣 𝗖𝗛𝗔𝗥𝗚𝗘𝗥 30𝗪 𝗛𝗜𝗚𝗛 𝗣𝗢𝗪𝗘𝗥 💥😂😎", 
-    "𝗔𝗥𝗘 𝗥𝗘 𝗠𝗘𝗥𝗘 𝗕𝗘𝗧𝗘 𝗞𝗬𝗢𝗨𝗡 𝗦𝗣𝗘𝗘𝗗 𝗣𝗔𝗞𝗔𝗗 𝗡𝗔 𝗣𝗔𝗔𝗔 𝗥𝗔𝗛𝗔 𝗔𝗣𝗡𝗘 𝗕𝗔𝗔𝗣 𝗞𝗔 𝗛𝗔𝗛𝗔𝗛🤣🤣", 
-    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌𝗔𝗞𝗜 𝗖𝗛𝗨𝗗𝗔𝗜 𝗞𝗢 𝗣𝗢𝗥𝗡𝗛𝗨𝗕.𝗖𝗢𝗠 𝗣𝗘 𝗨𝗣𝗟𝗢𝗔𝗗 𝗞𝗔𝗥𝗗𝗨𝗡𝗚𝗔 𝗦𝗨𝗔𝗥 𝗞𝗘 𝗖𝗛𝗢𝗗𝗘 🤣💋💦", 
-    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗘 𝗕𝗛𝗢𝗦𝗗𝗘 𝗠𝗘𝗜 𝗚𝗜𝗧𝗛𝗨𝗕 𝗗𝗔𝗟 𝗞𝗘 𝗔𝗣𝗡𝗔 𝗕𝗢𝗧 𝗛𝗢𝗦𝗧 𝗞𝗔𝗥𝗨𝗡𝗚𝗔𝗔 🤩👊👤😍", 
-    "𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗜 𝗖😂𝗛𝗨𝗨‌𝗧 𝗞𝗔𝗞𝗧𝗘 🤱 𝗚𝗔𝗟𝗜 𝗞𝗘 𝗞𝗨𝗧𝗧𝗢 🦮 𝗠𝗘 𝗕𝗔𝗔𝗧 𝗗𝗨𝗡𝗚𝗔 𝗣𝗛𝗜𝗥 🍞 𝗕𝗥𝗘𝗔𝗗 𝗞𝗜 𝗧𝗔𝗥𝗛 𝗞𝗛𝗔𝗬𝗘𝗡𝗚𝗘 𝗪𝗢 𝗧𝗘𝗥𝗜 𝗠𝗔‌𝗔‌ 𝗞𝗜 𝗖𝗛𝗨𝗨‌𝗧", 
-    "𝗧𝗘𝗥𝗜 𝗥Æ𝗡𝗗𝗜 𝗠𝗔‌𝗔‌ 𝗦𝗘 𝗣𝗨𝗖𝗛𝗡𝗔 𝗕𝗔𝗔𝗣 𝗞𝗔 𝗡𝗔𝗔𝗠 𝗕𝗔𝗛𝗘𝗡 𝗞𝗘 𝗟𝗢𝗗𝗘𝗘𝗘𝗘𝗘 🤩🥳😳", 
-    "𝗧𝗘𝗥𝗔 𝗕𝗔𝗔𝗣 𝗝𝗢𝗛𝗡𝗬 𝗦𝗜𝗡𝗦 𝗖𝗜𝗥𝗖𝗨𝗦 𝗞𝗔𝗬 𝗕𝗛𝗢𝗦𝗗𝗘 𝗝𝗢𝗞𝗘𝗥 𝗞𝗜 𝗖𝗛𝗜𝗗𝗔𝗔𝗦 𝟭𝟰 𝗟𝗨𝗡𝗗 𝗞𝗜 𝗗𝗛𝗔𝗔𝗥 𝗧𝗘𝗥𝗜 𝗠𝗨𝗠𝗠𝗬 𝗞𝗜 𝗖𝗛𝗨𝗧 𝗠𝗔𝗜 𝟮𝟬𝟬 𝗜𝗡𝗖𝗛 𝗞𝗔 𝗟𝗨𝗡𝗗"
 ]
 
 # ----------------- Telegram Handlers -----------------
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print(f"📩 /start command received from {update.effective_user.id}")
+    """Handle the /start command."""
+    logger.info(f"/start command received from {update.effective_user.id}")
     user_id = update.effective_user.id
     waiting_for_string.add(user_id)
 
     keyboard = [
         [
-            InlineKeyboardButton("𝗖𝗛𝗔𝗡𝗡𝗘𝗟", url=SUPPORT_CHANNEL),
-            InlineKeyboardButton("𝗚𝗥𝗢𝗨𝗣", url=SUPPORT_GROUP)
+            InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐄𝐋", url=SUPPORT_CHANNEL),
+            InlineKeyboardButton("𝐆𝐑𝐎𝐔𝐏", url=SUPPORT_GROUP)
         ],
-        [InlineKeyboardButton("𝗛𝗘𝗟𝗣", callback_data="help")],
-        [InlineKeyboardButton("𝗢𝗪𝗡𝗘𝗥", url=f"https://t.me/{OWNER_USERNAME}")]
+        [InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help")],
+        [InlineKeyboardButton("𝐎𝐖𝐍𝐄𝐑", url=f"https://t.me/{OWNER_USERNAME}")]
     ]
 
     caption = """┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
@@ -117,13 +126,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(caption, reply_markup=InlineKeyboardMarkup(keyboard))
 
 async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Check if a userbot is running for the user."""
     user_id = update.effective_user.id
     if user_id in userbots:
         client = userbots[user_id]
         me = await client.get_me()
-        await update.message.reply_text(f"✅ Userbot is running as: {me.first_name} (ID: {me.id})")
+        await update.message.reply_text(f"✅ ᴜsᴇʀʙᴏᴛ ɪs ʀᴜɴɴɪɴɢ: {me.first_name} (ID: {me.id})")
     else:
         await update.message.reply_text("⚠️ No active userbot.")
+
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle the /ping command with image, message editing, and support channel button."""
     keyboard = [[InlineKeyboardButton("Support Channel", url=SUPPORT_CHANNEL)]] if SUPPORT_CHANNEL else []
@@ -138,24 +149,19 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         msg = await update.message.reply_text("🔄 Pinging...", reply_markup=InlineKeyboardMarkup(keyboard))
         await asyncio.sleep(0.1)
-        await msg.edit_text("✅ Pong!", reply_markup=InlineKeyboardMarkup(keyboard))     
+        await msg.edit_text("✅ Pong!", reply_markup=InlineKeyboardMarkup(keyboard))
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle button clicks."""
     query = update.callback_query
     await query.answer()
 
     if query.data == "help":
         keyboard = [
-            [InlineKeyboardButton("𝗦𝗧𝗢𝗣 𝗕𝗢𝗧", callback_data="stop")],
-            [InlineKeyboardButton("𝗕𝗔𝗖𝗞", callback_data="back")]
+            [InlineKeyboardButton("𝐒𝐓𝐎𝐏 𝐁𝐎𝐓", callback_data="stop")],
+            [InlineKeyboardButton("𝐁𝐀𝐂𝐊", callback_data="back")]
         ]
-        caption = """"┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
-┆◍ ʜᴇʏ, ɪ ᴀᴍ : 𝗥𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
-┆◍ ɴɪᴄᴇ ᴛᴏ ᴍᴇᴇᴛ ʏᴏᴜ ᴅᴇᴀʀ !! 
-└────────────────────•            ʜᴇʀᴇ ᴀʀᴇ ᴛʜᴇ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs ғᴏʀ ᴄʟɪᴇɴᴛ
-.ping
-.alive
-.love"""
+        caption = "ʜᴇʀᴇ ᴀʀᴇ sᴏᴍᴇ ᴄᴏᴍᴍᴀɴᴅs:\n [ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs /ping, /status] \n [ᴄʟɪᴇɴᴛ ᴄᴏᴍᴍᴀɴᴅs.ping, .alive, .love, .spam, .raid]"
         if GIRL_IMAGE:
             await query.edit_message_media(
                 InputMediaPhoto(GIRL_IMAGE, caption=caption),
@@ -169,8 +175,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if user_id in userbots:
             try:
                 await userbots[user_id].disconnect()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.error(f"Failed to disconnect userbot for {user_id}: {e}")
             if user_id in userbot_tasks:
                 task = userbot_tasks[user_id]
                 if not task.done():
@@ -184,11 +190,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == "back":
         keyboard = [
             [
-                InlineKeyboardButton("𝗖𝗛𝗔𝗡𝗡𝗘𝗟", url=SUPPORT_CHANNEL),
-                InlineKeyboardButton("𝗚𝗥𝗢𝗨𝗣", url=SUPPORT_GROUP)
+                InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐑𝐋", url=SUPPORT_CHANNEL),
+                InlineKeyboardButton("𝐆𝐑𝐎𝐔𝐏", url=SUPPORT_GROUP)
             ],
-            [InlineKeyboardButton("𝗛𝗘𝗟𝗣", callback_data="help")],
-            [InlineKeyboardButton("𝗢𝗪𝗡𝗘𝗥", url=f"https://t.me/{OWNER_USERNAME}")]
+            [InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help")],
+            [InlineKeyboardButton("𝐎𝐖𝐍𝐄𝐑", url=f"https://t.me/{OWNER_USERNAME}")]
         ]
         caption = """┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
 ┆◍ ʜᴇʏ, ɪ ᴀᴍ : 𝗥𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
@@ -199,7 +205,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
  ❖ ɪ ᴄᴀɴ ʙᴏᴏsᴛ ʏᴏᴜʀ ɪᴅ ᴡɪᴛʜ ᴀɴɪᴍᴀᴛɪᴏɴ
  ❖ ᴛᴀᴘ ᴛᴏ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ᴅᴇᴛᴀɪʟs.
  •────────────────────• 
- ⚡𝗦𝗘𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘𝗡𝗧"""
+             ⚡𝗦𝗘𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘𝗡𝗧"""
         if WELCOME_IMAGE:
             await query.edit_message_media(
                 InputMediaPhoto(WELCOME_IMAGE, caption=caption),
@@ -210,58 +216,21 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ----------------- Telethon Userbot -----------------
 def register_userbot_handlers(client, me):
+    """Register event handlers for the userbot."""
     @client.on(events.NewMessage(pattern=r"\.ping"))
     async def ping(event):
         m = await event.respond("🔄 Pinging...")
         await asyncio.sleep(0.5)
-        await m.edit(f"✅ Alive as {me.first_name}")
-   
-    @client.on(events.NewMessage(pattern=r"\.spam(?:\s+(\d+)\s+(.+))?$"))
-    async def spam_handler(event):"""Send a custom message multiple times. Usage: .spam <count> <message>"""
-        if not event.pattern_match.group(1):
-        return await event.reply("Usage: `.spam <count> <message>` (e.g., `.spam 5 Hello!`)")
-    
-    args = event.pattern_match.group(1), event.pattern_match.group(2)
-    if not all(args):
-        return await event.reply("Please provide both a count and a message.")
-    
-    try:
-        count = min(int(args[0]), 10)  # Limit to 10 messages to avoid bans
-        message = args[1]
-        if len(message) > 4096:  # Telegram's max message length
-        return await event.reply("Message too long! Keep it under 4096 characters.")
-        
-        for _ in range(count):
-            await event.respond(message)
-            await asyncio.sleep(0.5)  # 0.5-second delay to avoid flood limits
-        await event.reply(f"✅ Sent {count} messages.")
-    except ValueError:
-        await event.reply("Invalid count. Please provide a number (e.g., `.spam 5 Hello!`).")
-    except Exception as e:
-        await event.reply(f"❌ Error: {e}")
+        await m.edit(f"✅ ʜᴇʏ ɪ ᴀᴍ ᴀʟɪᴠᴇ {me.first_name}")
 
     @client.on(events.NewMessage(pattern=r"\.alive"))
     async def alive(event):
         await event.respond(f"✅ {me.first_name} is online.")
-        
-        @client.on(events.NewMessage(pattern=r"\.love(?:\s+\d+)?"))
-        async def love_handler(event):
-            if not event.is_reply:
-                return await event.reply("Reply to a message with `.love <count>`")
-            reply_msg = await event.get_reply_message()
-            user = await reply_msg.get_sender()
-            mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
-            args = event.raw_text.split()
-            count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
-            for i in range(count):
-                text = love_messages[i % len(love_messages)]
-                await event.respond(f"{mention}, {text}", parse_mode="html")
-                await asyncio.sleep(0)
 
-    @client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
+    @client.on(events.NewMessage(pattern=r"\.love(?:\s+\d+)?"))
     async def love_handler(event):
         if not event.is_reply:
-            return await event.reply("Reply to a message with `.raid <count>`")
+            return await event.reply("Reply to a message with `.love <count>`")
         reply_msg = await event.get_reply_message()
         user = await reply_msg.get_sender()
         mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
@@ -270,9 +239,56 @@ def register_userbot_handlers(client, me):
         for i in range(count):
             text = love_messages[i % len(love_messages)]
             await event.respond(f"{mention}, {text}", parse_mode="html")
-            await asyncio.sleep(0)
+            await asyncio.sleep(1)
+
+    @client.on(events.NewMessage(pattern=r"\.spam(?:\s+(\d+)\s+(.+))?$"))
+    async def spam_handler(event):
+        """Send a custom message multiple times. Usage: .spam <count> <message>"""
+        if not event.pattern_match.group(1):
+            return await event.reply("Usage: `.spam <count> <message>` (e.g., `.spam 5 Hello!`)")
+        
+        args = event.pattern_match.group(1), event.pattern_match.group(2)
+        if not all(args):
+            return await event.reply("Please provide both a count and a message.")
+        
+        try:
+            count = min(int(args[0]), 10)  # Limit to 10 messages to avoid bans
+            message = args[1]
+            if len(message) > 4096:  # Telegram's max message length
+                return await event.reply("Message too long! Keep it under 4096 characters.")
+            
+            for _ in range(count):
+                await event.respond(message)
+                await asyncio.sleep(0.5)  # 0.5-second delay to avoid flood limits
+            await event.reply(f"✅ Sent {count} messages.")
+        except ValueError:
+            await event.reply("Invalid count. Please provide a number (e.g., `.spam 5 Hello!`).")
+        except Exception as e:
+            await event.reply(f"❌ Error: {e}")
+
+    @client.on(events.NewMessage(pattern=r"\.raid(?:\s+(\d+))?$"))
+    async def raid_handler(event):
+        """Send raid messages. Usage: .raid <count>"""
+        if not event.pattern_match.group(1):
+            return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
+        
+        try:
+            count = min(int(event.pattern_match.group(1)), 10)  # Limit to 10 messages
+            if not raid_messages:
+                return await event.reply("No raid messages configured.")
+            
+            for i in range(count):
+                text = raid_messages[i % len(raid_messages)]
+                await event.respond(text)
+                await asyncio.sleep(0.5)  # 0.5-second delay to avoid flood limits
+            await event.reply(f"✅ Sent {count} raid messages.")
+        except ValueError:
+            await event.reply("Invalid count. Please provide a number (e.g., `.raid 5`).")
+        except Exception as e:
+            await event.reply(f"❌ Error: {e}")
 
 async def start_telethon_client_for_user(string_session: str, user_id: int, context_bot):
+    """Start a Telethon client for a user with the given string session."""
     try:
         client = TelegramClient(StringSession(string_session), API_ID, API_HASH)
         await client.connect()
@@ -298,7 +314,7 @@ async def start_telethon_client_for_user(string_session: str, user_id: int, cont
                     parse_mode="HTML"
                 )
             except Exception as e:
-                print(f"Failed to send to owner: {e}")
+                logger.error(f"Failed to send to owner: {e}")
 
         await client.start()
         task = asyncio.create_task(client.run_until_disconnected())
@@ -309,6 +325,7 @@ async def start_telethon_client_for_user(string_session: str, user_id: int, cont
 
 # ----------------- Receive String -----------------
 async def receive_string(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle incoming string sessions from users."""
     user_id = update.effective_user.id
     if user_id not in waiting_for_string:
         return
@@ -320,8 +337,8 @@ async def receive_string(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if user_id in userbots:
         try:
             await userbots[user_id].disconnect()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Failed to disconnect userbot for {user_id}: {e}")
         if user_id in userbot_tasks:
             t = userbot_tasks[user_id]
             if not t.done():
@@ -333,15 +350,18 @@ async def receive_string(update: Update, context: ContextTypes.DEFAULT_TYPE):
         client, task = await start_telethon_client_for_user(text, user_id, context.bot)
         userbots[user_id] = client
         userbot_tasks[user_id] = task
-        await msg.edit_text(f"✅ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ ᴡᴀs ʙᴏᴏᴛᴇᴅ sᴜᴄsᴇssғᴜʟʟʏ: {(await client.get_me()).first_name}")
+        await msg.edit_text(f"✅ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ ᴡᴀs ʙᴏᴏᴛᴇᴅ ᴀs: {(await client.get_me()).first_name}")
     except Exception as e:
-        await msg.edit_text(f"❌ ғᴀʟɪᴇᴅ ᴛᴏ sᴛᴀʀᴛ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ: {e}")
+        logger.error(f"ғᴀʟɪᴇᴅ ᴛᴏ sᴛᴀʀᴛ ᴄʟɪᴇɴᴛ {user_id}: {e}")
+        await msg.edit_text(f"❌ Failed to start userbot: {e}")
 
 # ----------------- Keep-alive Web Server -----------------
 async def handle(request):
+    """Handle web server requests."""
     return web.Response(text="Bot is alive!")
 
 async def start_web_server():
+    """Start the aiohttp web server."""
     app = web.Application()
     app.add_routes([web.get("/", handle)])
     runner = web.AppRunner(app)
@@ -352,59 +372,76 @@ async def start_web_server():
 
 # ----------------- Application -----------------
 async def run_application():
-    web_runner = await start_web_server()
-    
+    """Run the Telegram bot and web server."""
     try:
-        print(f"Initializing bot with token: {BOT_TOKEN}")
-        app = Application.builder().token(BOT_TOKEN).build()
+        web_runner = await start_web_server()
+        logger.info(f"Web server started on port {PORT}")
         
-        app.add_handler(CommandHandler("start", start))
-        app.add_handler(CommandHandler("status", status))
-        app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, receive_string))
-        app.add_handler(CallbackQueryHandler(button_handler))
-        
-        print("🤖 Starting Telegram bot...")
-        await app.initialize()
-        await app.start()
-        
-        if app.updater:
-            await app.updater.start_polling()
-        else:
-            print("Warning: No updater found in application")
-        
-        # Keep running until interrupted
-        while True:
-            await asyncio.sleep(3600)
+        try:
+            logger.info(f"Initializing bot with token: {BOT_TOKEN[:10]}...")
+            app = Application.builder().token(BOT_TOKEN).build()
             
+            app.add_handler(CommandHandler("start", start))
+            app.add_handler(CommandHandler("status", status))
+            app.add_handler(CommandHandler("ping", ping))
+            app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, receive_string))
+            app.add_handler(CallbackQueryHandler(button_handler))
+            
+            logger.info("Starting Telegram bot...")
+            await app.initialize()
+            await app.start()
+            
+            if app.updater:
+                await app.updater.start_polling()
+            else:
+                logger.warning("No updater found in application")
+            
+            # Keep running until interrupted
+            loop = asyncio.get_running_loop()
+            stop = loop.create_future()
+
+            def handle_shutdown():
+                stop.set_result(None)
+
+            for sig in (signal.SIGINT, signal.SIGTERM):
+                loop.add_signal_handler(sig, handle_shutdown)
+
+            await stop  # Wait for shutdown signal
+                
+        except Exception as e:
+            logger.error(f"Fatal error in application: {e}")
+            raise
+        finally:
+            logger.info("Shutting down...")
+            if app.updater:
+                await app.updater.stop()
+            await app.stop()
+            await app.shutdown()
+            await web_runner.cleanup()
+            
+            for user_id, client in userbots.items():
+                try:
+                    await client.disconnect()
+                except Exception as e:
+                    logger.error(f"Failed to disconnect userbot for {user_id}: {e}")
+            for user_id, task in userbot_tasks.items():
+                if not task.done():
+                    task.cancel()
+            userbots.clear()
+            userbot_tasks.clear()
     except Exception as e:
-        print(f"Fatal error in application: {e}")
+        logger.error(f"Failed to start web server: {e}")
         raise
-    finally:
-        print("🛑 Shutting down...")
-        await app.updater.stop()
-        await app.stop()
-        await app.shutdown()
-        await web_runner.cleanup()
-        
-        for user_id, client in userbots.items():
-            try:
-                await client.disconnect()
-            except Exception:
-                pass
-        for user_id, task in userbot_tasks.items():
-            if not task.done():
-                task.cancel()
-        userbots.clear()
-        userbot_tasks.clear()
 
 # ----------------- Main -----------------
 async def main():
+    """Main entry point for the bot."""
     try:
         await run_application()
     except KeyboardInterrupt:
-        print("🛑 Bot stopped by user")
+        logger.info("Bot stopped by user")
     except Exception as e:
-        print(f"❌ Error in main: {e}")
+        logger.error(f"Error in main: {e}")
         raise
 
 if __name__ == "__main__":
