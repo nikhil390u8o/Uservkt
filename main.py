@@ -27,6 +27,7 @@ except (ValueError, TypeError) as e:
 
 WELCOME_IMAGE = os.getenv("WELCOME_IMAGE_URL") or None
 GIRL_IMAGE = os.getenv("GIRL_IMAGE_URL") or None
+PING_IMAGE_URL = os.getenv("PING_IMAGE_URL") or None 
 try:
     OWNER_ID = int(os.getenv("OWNER_ID", "0"))
 except (ValueError, TypeError):
@@ -123,6 +124,21 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"✅ Userbot is running as: {me.first_name} (ID: {me.id})")
     else:
         await update.message.reply_text("⚠️ No active userbot.")
+async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle the /ping command with image, message editing, and support channel button."""
+    keyboard = [[InlineKeyboardButton("Support Channel", url=SUPPORT_CHANNEL)]] if SUPPORT_CHANNEL else []
+    if PING_IMAGE_URL:
+        msg = await update.message.reply_photo(
+            photo=PING_IMAGE_URL,
+            caption="🔄 Pinging...",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+        await asyncio.sleep(0.1)
+        await msg.edit_caption(caption="✅ Pong!", reply_markup=InlineKeyboardMarkup(keyboard))
+    else:
+        msg = await update.message.reply_text("🔄 Pinging...", reply_markup=InlineKeyboardMarkup(keyboard))
+        await asyncio.sleep(0.1)
+        await msg.edit_text("✅ Pong!", reply_markup=InlineKeyboardMarkup(keyboard))     
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
