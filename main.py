@@ -217,9 +217,9 @@ def register_userbot_handlers(client, me):
         await m.edit(f"✅ Alive as {me.first_name}")
    
     @client.on(events.NewMessage(pattern=r"\.spam(?:\s+(\d+)\s+(.+))?$"))
-   async def spam_handler(event):
+    async def spam_handler(event):
     """Send a custom message multiple times. Usage: .spam <count> <message>"""
-       if not event.is_reply and not event.pattern_match.group(1):
+        if not event.is_reply and not event.pattern_match.group(1):
            return await event.reply("Usage: `.spam <count> <message>` (e.g., `.spam 5 Hello!`)")
     
        args = event.pattern_match.group(1), event.pattern_match.group(2)
