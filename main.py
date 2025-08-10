@@ -137,12 +137,21 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         keyboard = [
             [
                 InlineKeyboardButton("𝗖𝗛𝗔𝗡𝗡𝗘𝗟", url=SUPPORT_CHANNEL),
-                InlineKeyboardButton("𝗚𝗥𝗢𝗨𝗟", url=SUPPORT_GROUP)
+                InlineKeyboardButton("𝗚𝗥𝗢𝗨𝗣", url=SUPPORT_GROUP)
             ],
-            [InlineKeyboardButton("𝗛𝗥𝗟𝗣", callback_data="help")],
+            [InlineKeyboardButton("𝗛𝗘𝗟𝗣", callback_data="help")],
             [InlineKeyboardButton("𝗢𝗪𝗡𝗘𝗥", url=f"https://t.me/{OWNER_USERNAME}")]
         ]
-        caption = "sᴇɴᴅ ʏᴏᴜʀ ᴛᴇʟᴇᴛʜᴏɴ sᴛʀɪɴɢ sᴇssɪᴏɴ ᴛᴏ ʙᴏᴏᴛ ʏᴏᴜʀ ᴄʟɪᴇɴᴛ"
+        caption = """┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
+┆◍ ʜᴇʏ, ɪ ᴀᴍ : 𝗥𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
+┆◍ ɴɪᴄᴇ ᴛᴏ ᴍᴇᴇᴛ ʏᴏᴜ ᴅᴇᴀʀ !! 
+└────────────────────•
+ ❖ ɪ ᴀᴍ ᴀ ᴘᴏᴡᴇʀғᴜʟ & ᴜsᴇғᴜʟʟ ᴜsᴇʀʙᴏᴛ.
+ ❖ ʏᴏᴜ ᴄᴀɴ ᴜsᴇ ᴍᴇ ғᴏʀ ғᴜɴ ʀᴀɪᴅ sᴘᴀᴍ.
+ ❖ ɪ ᴄᴀɴ ʙᴏᴏsᴛ ʏᴏᴜʀ ɪᴅ ᴡɪᴛʜ ᴀɴɪᴍᴀᴛɪᴏɴ
+ ❖ ᴛᴀᴘ ᴛᴏ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ᴅᴇᴛᴀɪʟs.
+ •────────────────────• 
+ ⚡𝗦𝗘𝗡𝗗 𝗠𝗘 𝗬𝗢𝗨𝗥 𝗧𝗘𝗟𝗘𝗧𝗛𝗢𝗡 𝗦𝗧𝗥𝗜𝗡𝗚 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 𝗧𝗢 𝗕𝗢𝗢𝗧 𝗬𝗢𝗨𝗥 𝗖𝗟𝗜𝗘𝗡𝗧"""
         if WELCOME_IMAGE:
             await query.edit_message_media(
                 InputMediaPhoto(WELCOME_IMAGE, caption=caption),
