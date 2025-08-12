@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from telethon import TelegramClient
+from telethon.sessions import StringSession
+from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, filters
 import os
 import warnings
 import asyncio
