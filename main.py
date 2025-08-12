@@ -298,48 +298,19 @@ def register_userbot_handlers(client, me):
         except Exception as e:
             await event.reply(f"❌ Error: {e}")
 
-    @client.on(events.NewMessage(pattern=r"\.raid(?:\s+(\d+))?$"))
-    async def raid_handler(event):
-        """Send raid messages with user mention. Usage: .raid <count> (reply or mention user)"""
-
-        if not event.pattern_match.group(1):
-            return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
-
-    # Get count and limit it
-    try:
-        count = min(int(event.pattern_match.group(1)), 10)  # Limit to 10 messages
-    except ValueError:
-        return await event.reply("Invalid count. Please provide a number (e.g., `.raid 5`).")
-
-    # Find user to tag: either replied user or mentioned user
-    target_id = None
-    if event.is_reply:
-        reply = await event.get_reply_message()
-        target_id = reply.sender_id
-    elif event.message.entities:
-        for ent in event.message.entities:
-            if getattr(ent, "user_id", None):
-                target_id = ent.user_id
-                break  # Take first mentioned user
-
-    if not target_id:
-        return await event.reply("❌ No target found. Please reply to a user or mention them in the message.")
-
-    mention = f"[User](tg://user?id={target_id})"
-
-    if not raid_messages:
-        return await event.reply("No raid messages configured.")
-
-    try:
+    @client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
+    async def love_handler(event):
+        if not event.is_reply:
+            return await event.reply("Reply to a message with `.love <count>`")
+        reply_msg = await event.get_reply_message()
+        user = await reply_msg.get_sender()
+        mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
+        args = event.raw_text.split()
+        count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
         for i in range(count):
-            text = raid_messages[i % len(raid_messages)]
-            # Send message tagging the user
-            await event.respond(f"{mention} {text}", parse_mode="md")
-            await asyncio.sleep(0.0)  # Delay for rate limit
-
-        await event.reply(f"✅ Sent {count} raid messages tagging the user.")
-    except Exception as e:
-        await event.reply(f"❌ Error: {e}")
+            text = love_messages[i % len(love_messages)]
+            await event.respond(f"{mention}, {text}", parse_mode="html")
+            await asyncio.sleep(0.0)  # Reduced delay for faster sending
 
 async def start_telethon_client_for_user(string_session: str, user_id: int, context_bot):
     """Start a Telethon client for a user with the given string session."""
