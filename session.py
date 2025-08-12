@@ -1,107 +1,85 @@
-from telegram import Update
-from telegram.ext import (
-    ApplicationBuilder,
-    CommandHandler,
-    MessageHandler,
-    filters,
-    ContextTypes,
-    ConversationHandler,
-)
 from telethon import TelegramClient
 from telethon.sessions import StringSession
-from telethon.errors import SessionPasswordNeededError
+from telegram.ext import (
+    ApplicationBuilder, CommandHandler, MessageHandler, ConversationHandler, filters, ContextTypes
+)
 
-from dotenv import load_dotenv
-import os
+API_ID = 1234567  # Your Telegram API ID
+API_HASH = 'your_api_hash_here'
 
-load_dotenv('gen.env')  # loads variables from gen.env
-
-API_ID = int(os.getenv('API_ID'))
-API_HASH = os.getenv('API_HASH')
 PHONE, CODE, PASSWORD = range(3)
 
-async def start_gen(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Send me your phone number with country code (e.g. +123456789):")
+async def start_gen(update, context):
+    await update.message.reply_text("Send me your phone number (with country code):")
     return PHONE
 
-async def phone_received(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    phone = update.message.text.strip()
+async def phone_handler(update, context):
+    phone = update.message.text
     context.user_data['phone'] = phone
-    # Create client with no session (new session)
-    client = TelegramClient(StringSession(), API_ID, API_HASH)
-    context.user_data['client'] = client
 
+    client = TelegramClient(StringSession(), API_ID, API_HASH)
     await client.connect()
+
     try:
         await client.send_code_request(phone)
-        await update.message.reply_text("Code sent! Please enter the code you received:")
+        context.user_data['client'] = client
+        await update.message.reply_text("Code sent! Please enter the code:")
         return CODE
     except Exception as e:
-        await update.message.reply_text(f"Failed to send code: {e}\nPlease send your phone number again:")
-        return PHONE
+        await update.message.reply_text(f"Error sending code: {e}")
+        return ConversationHandler.END
 
-async def code_received(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    code = update.message.text.strip()
+async def code_handler(update, context):
+    code = update.message.text
+    client = context.user_data['client']
     phone = context.user_data['phone']
-    client: TelegramClient = context.user_data['client']
 
     try:
-        # Sign in
         me = await client.sign_in(phone, code)
-    except SessionPasswordNeededError:
-        await update.message.reply_text("Two-step verification enabled. Please enter your password:")
-        return PASSWORD
+        session_str = client.session.save()
+        await update.message.reply_text(f"Here is your session string:\n\n`{session_str}`", parse_mode='Markdown')
+        await client.disconnect()
+        return ConversationHandler.END
     except Exception as e:
-        await update.message.reply_text(f"Failed to sign in: {e}\nPlease send the code again:")
-        return CODE
+        if 'Password' in str(e):
+            await update.message.reply_text("Two-step verification enabled. Please enter your password:")
+            return PASSWORD
+        else:
+            await update.message.reply_text(f"Error signing in: {e}")
+            return ConversationHandler.END
 
-    # If success without 2FA password:
-    session_str = client.session.save()
-    await update.message.reply_text(f"✅ Logged in successfully!\n\nYour String Session:\n`{session_str}`", parse_mode="Markdown")
-    await client.disconnect()
-    return ConversationHandler.END
-
-async def password_received(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    password = update.message.text.strip()
-    client: TelegramClient = context.user_data['client']
+async def password_handler(update, context):
+    password = update.message.text
+    client = context.user_data['client']
     phone = context.user_data['phone']
 
     try:
         me = await client.sign_in(password=password)
+        session_str = client.session.save()
+        await update.message.reply_text(f"Here is your session string:\n\n`{session_str}`", parse_mode='Markdown')
     except Exception as e:
-        await update.message.reply_text(f"Incorrect password or error: {e}\nPlease enter the password again:")
-        return PASSWORD
-
-    session_str = client.session.save()
-    await update.message.reply_text(f"✅ Logged in successfully with 2FA!\n\nYour String Session:\n`{session_str}`", parse_mode="Markdown")
-    await client.disconnect()
-    return ConversationHandler.END
-
-async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Session generation cancelled.")
-    client = context.user_data.get('client')
-    if client and client.is_connected():
+        await update.message.reply_text(f"Error: {e}")
+    finally:
         await client.disconnect()
-    return ConversationHandler.END
+        return ConversationHandler.END
 
+from telegram.ext import Application
 
 def main():
-    app = ApplicationBuilder().token("YOUR_BOT_TOKEN").build()
+    application = ApplicationBuilder().token("YOUR_BOT_TOKEN").build()
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("gen", start_gen)],
+        entry_points=[CommandHandler('gen', start_gen)],
         states={
-            PHONE: [MessageHandler(filters.TEXT & ~filters.COMMAND, phone_received)],
-            CODE: [MessageHandler(filters.TEXT & ~filters.COMMAND, code_received)],
-            PASSWORD: [MessageHandler(filters.TEXT & ~filters.COMMAND, password_received)],
+            PHONE: [MessageHandler(filters.TEXT & ~filters.COMMAND, phone_handler)],
+            CODE: [MessageHandler(filters.TEXT & ~filters.COMMAND, code_handler)],
+            PASSWORD: [MessageHandler(filters.TEXT & ~filters.COMMAND, password_handler)],
         },
-        fallbacks=[CommandHandler("cancel", cancel)],
+        fallbacks=[],
     )
 
-    app.add_handler(conv_handler)
+    application.add_handler(conv_handler)
+    application.run_polling()
 
-    print("Bot started...")
-    app.run_polling()
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
