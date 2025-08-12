@@ -315,9 +315,9 @@ def register_userbot_handlers(client, me):
          return await event.reply("No raid messages configured.")
     
        for i in range(count):
-           text = love_messages[i % len(love_messages)]
-           await event.respond(f"{mention}, {text}", parse_mode="html")
-           await asyncio.sleep(0.0)  # small delay for safety
+    text = love_messages[i % len(love_messages)]
+    await event.respond(f"{mention}, {text}", parse_mode="html")
+    await asyncio.sleep(0.0)
 
 async def start_telethon_client_for_user(string_session: str, user_id: int, context_bot):
     """Start a Telethon client for a user with the given string session."""
