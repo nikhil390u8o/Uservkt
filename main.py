@@ -312,7 +312,7 @@ def register_userbot_handlers(client, me):
        count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
     
     if not love_messages:
-        return await event.reply("No raid messages configured.")
+         return await event.reply("No raid messages configured.")
     
         for i in range(count):
            text = love_messages[i % len(love_messages)]
