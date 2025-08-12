@@ -299,7 +299,7 @@ def register_userbot_handlers(client, me):
             await event.reply(f"❌ Error: {e}")
 
     @client.on(events.NewMessage(pattern=r"\.raid(?:\s+(\d+))?$"))
-async def raid_handler(event):
+    async def raid_handler(event):
     """Send raid messages. Usage: .raid <count> (reply to a user or mention them)"""
     
     if not event.pattern_match.group(1):
