@@ -8,7 +8,7 @@ API_HASH = os.getenv("API_HASH")
 # Your bot client (use your bot token here)
 bot = TelegramClient('bot_session', API_ID, API_HASH).start(bot_token=os.getenv("BOT_TOKEN"))
 
-@bot.on(events.NewMessage(pattern=r"^/genstring$"))
+@bot.on(events.NewMessage(pattern=r"^/gen$"))
 async def gen_string_handler(event):
     sender = await event.get_sender()
     if sender.bot:
