@@ -298,15 +298,15 @@ def register_userbot_handlers(client, me):
         except Exception as e:
             await event.reply(f"❌ Error: {e}")
 
- @client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
- async def raid_handler(event):
+@client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
+async def raid_handler(event):
     if not event.is_reply:
         return await event.reply("Reply to a message with `.raid <count>`")
 
     reply_msg = await event.get_reply_message()
     user = await reply_msg.get_sender()
 
-    mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.i>
+    mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
 
     args = event.raw_text.split()
     count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
