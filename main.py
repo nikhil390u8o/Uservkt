@@ -297,7 +297,6 @@ def register_userbot_handlers(client, me):
             await event.reply("Invalid count. Please provide a number (e.g., `.spam 5 Hello!`).")
         except Exception as e:
             await event.reply(f"❌ Error: {e}")
-
  @client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
  async def raid_handler(event):
     if not event.is_reply:
@@ -318,6 +317,7 @@ def register_userbot_handlers(client, me):
         text = love_messages[i % len(love_messages)]
         await event.respond(f"{mention}, {text}", parse_mode="html")
         await asyncio.sleep(0.0)
+
 
 async def start_telethon_client_for_user(string_session: str, user_id: int, context_bot):
     """Start a Telethon client for a user with the given string session."""
