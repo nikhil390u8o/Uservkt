@@ -300,24 +300,43 @@ def register_userbot_handlers(client, me):
 
     @client.on(events.NewMessage(pattern=r"\.raid(?:\s+(\d+))?$"))
     async def raid_handler(event):
-        """Send raid messages. Usage: .raid <count>"""
-        if not event.pattern_match.group(1):
-            return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
-        
-        try:
-            count = min(int(event.pattern_match.group(1)), 10)  # Limit to 10 messages
-            if not raid_messages:
-                return await event.reply("No raid messages configured.")
-            
-            for i in range(count):
-                text = raid_messages[i % len(raid_messages)]
-                await event.respond(text)
-                await asyncio.sleep(0.2)  # Reduced delay for faster sending
-            await event.reply(f"✅ Sent {count} raid messages.")
-        except ValueError:
-            await event.reply("Invalid count. Please provide a number (e.g., `.raid 5`).")
-        except Exception as e:
-            await event.reply(f"❌ Error: {e}")
+    """Send raid messages. Usage: .raid <count> (reply to a user or mention them)"""
+       if not event.pattern_match.group(1):
+         return await event.reply("Usage: .raid <count> (e.g., .raid 5)")
+
+    try:
+        count = min(int(event.pattern_match.group(1)), 50)  # you can increase limit
+    except ValueError:
+        return await event.reply("Invalid count. Example: .raid 5")
+
+    # Detect target
+    target_id = None
+    if event.is_reply:
+        reply = await event.get_reply_message()
+        target_id = reply.sender_id
+    elif event.message.entities:
+        for ent in event.message.entities:
+            if ent.user_id:
+                target_id = ent.user_id
+
+    if not target_id:
+        return await event.reply("❌ No target found. Reply to a user or mention them.")
+
+    mention = f"[Click Here](tg://user?id={target_id})"
+
+    await event.reply(f"🔥 Starting raid on {mention} 🔥", parse_mode="md")
+
+    try:
+        for i in range(count):
+            msg = raid_messages[i % len(raid_messages)]
+            try:
+                await event.respond(f"{mention} {msg}", parse_mode="md")
+            except FloodWaitError as e:
+                await asyncio.sleep(e.seconds)
+            await asyncio.sleep(0.1)  # fixed fast speed
+        await event.reply(f"✅ Sent {count} raid messages to {mention}", parse_mode="md")
+    except Exception as e:
+        await event.reply(f"❌ Error: {e}")
 
 async def start_telethon_client_for_user(string_session: str, user_id: int, context_bot):
     """Start a Telethon client for a user with the given string session."""
