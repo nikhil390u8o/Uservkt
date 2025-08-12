@@ -314,7 +314,7 @@ def register_userbot_handlers(client, me):
     if not love_messages:
          return await event.reply("No raid messages configured.")
     
-        for i in range(count):
+       for i in range(count):
            text = love_messages[i % len(love_messages)]
            await event.respond(f"{mention}, {text}", parse_mode="html")
            await asyncio.sleep(0.0)  # small delay for safety
