@@ -298,26 +298,26 @@ def register_userbot_handlers(client, me):
         except Exception as e:
             await event.reply(f"❌ Error: {e}")
 
-    @client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
-    async def raid_handler(event):
-       if not event.is_reply:
-           return await event.reply("Reply to a message with `.raid <count>`")
-    
-       reply_msg = await event.get_reply_message()
-       user = await reply_msg.get_sender()
-    
-       mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
-    
-       args = event.raw_text.split()
-       count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
-    
+ @client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
+ async def raid_handler(event):
+    if not event.is_reply:
+        return await event.reply("Reply to a message with `.raid <count>`")
+
+    reply_msg = await event.get_reply_message()
+    user = await reply_msg.get_sender()
+
+    mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.i>
+
+    args = event.raw_text.split()
+    count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
+
     if not love_messages:
-         return await event.reply("No raid messages configured.")
-    
-       for i in range(count):
-    text = love_messages[i % len(love_messages)]
-    await event.respond(f"{mention}, {text}", parse_mode="html")
-    await asyncio.sleep(0.0)
+        return await event.reply("No raid messages configured.")
+
+    for i in range(count):
+        text = love_messages[i % len(love_messages)]
+        await event.respond(f"{mention}, {text}", parse_mode="html")
+        await asyncio.sleep(0.0)
 
 async def start_telethon_client_for_user(string_session: str, user_id: int, context_bot):
     """Start a Telethon client for a user with the given string session."""
