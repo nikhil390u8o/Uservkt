@@ -299,18 +299,17 @@ def register_userbot_handlers(client, me):
             await event.reply(f"❌ Error: {e}")
 
     @client.on(events.NewMessage(pattern=r"\.raid(?:\s+(\d+))?$"))
-    async def raid_handler(event):
+async def raid_handler(event):
     """Send raid messages. Usage: .raid <count> (reply to a user or mention them)"""
-    
+
     if not event.pattern_match.group(1):
         return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
 
     try:
-        count = min(int(event.pattern_match.group(1)), 50)  # you can increase limit
+        count = min(int(event.pattern_match.group(1)), 50)  # max limit
     except ValueError:
         return await event.reply("Invalid count. Example: `.raid 5`")
 
-    # Detect target
     target_id = None
     if event.is_reply:
         reply = await event.get_reply_message()
@@ -330,11 +329,8 @@ def register_userbot_handlers(client, me):
     try:
         for i in range(count):
             msg = raid_messages[i % len(raid_messages)]
-            try:
-                await event.respond(f"{mention} {msg}", parse_mode="md")
-            except FloodWaitError as e:
-                await asyncio.sleep(e.seconds)
-            await asyncio.sleep(0.1)  # fixed fast speed
+            await event.respond(f"{mention} {msg}", parse_mode="md")
+            await asyncio.sleep(0.1)  # fast speed
         await event.reply(f"✅ Sent {count} raid messages to {mention}", parse_mode="md")
     except Exception as e:
         await event.reply(f"❌ Error: {e}")
