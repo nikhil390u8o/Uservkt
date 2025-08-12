@@ -301,10 +301,12 @@ def register_userbot_handlers(client, me):
     def main():
     @client.on(events.NewMessage(pattern=r"\.raid(?:\s+(\d+))?$"))
     async def raid_handler(event):
-    """Send raid messages. Usage: .raid <count> (reply to a user or mention them)"""
+        """Send raid messages. Usage: .raid <count> (reply to a user or mention them)"""
 
-    if not event.pattern_match.group(1):
-        return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
+        if not event.pattern_match.group(1):
+            return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
+
+        # rest of the code indented here
 
     try:
         count = min(int(event.pattern_match.group(1)), 50)  # max limit
