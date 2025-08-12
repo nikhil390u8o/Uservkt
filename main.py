@@ -307,7 +307,7 @@ def register_userbot_handlers(client, me):
         args = event.raw_text.split()
         count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
         for i in range(count):
-            text = love_messages[i % len(love_messages)]
+            text = raid_messages[i % len(raid_messages)]
             await event.respond(f"{mention}, {text}", parse_mode="html")
             await asyncio.sleep(0.0)  # Reduced delay for faster sending
 
