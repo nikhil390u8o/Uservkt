@@ -300,10 +300,10 @@ def register_userbot_handlers(client, me):
 
     @client.on(events.NewMessage(pattern=r"\.raid(?:\s+(\d+))?$"))
     async def raid_handler(event):
-    """Send raid messages with user mention. Usage: .raid <count> (reply or mention user)"""
+        """Send raid messages with user mention. Usage: .raid <count> (reply or mention user)"""
 
-    if not event.pattern_match.group(1):
-        return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
+        if not event.pattern_match.group(1):
+            return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
 
     # Get count and limit it
     try:
