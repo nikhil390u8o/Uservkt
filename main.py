@@ -298,21 +298,20 @@ def register_userbot_handlers(client, me):
         except Exception as e:
             await event.reply(f"❌ Error: {e}")
 
-    def main():
     @client.on(events.NewMessage(pattern=r"\.raid(?:\s+(\d+))?$"))
     async def raid_handler(event):
-        """Send raid messages. Usage: .raid <count> (reply to a user or mention them)"""
+    """Send raid messages with user mention. Usage: .raid <count> (reply or mention user)"""
 
-        if not event.pattern_match.group(1):
-            return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
+    if not event.pattern_match.group(1):
+        return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
 
-        # rest of the code indented here
-
+    # Get count and limit it
     try:
-        count = min(int(event.pattern_match.group(1)), 50)  # max limit
+        count = min(int(event.pattern_match.group(1)), 10)  # Limit to 10 messages
     except ValueError:
-        return await event.reply("Invalid count. Example: `.raid 5`")
+        return await event.reply("Invalid count. Please provide a number (e.g., `.raid 5`).")
 
+    # Find user to tag: either replied user or mentioned user
     target_id = None
     if event.is_reply:
         reply = await event.get_reply_message()
@@ -321,20 +320,24 @@ def register_userbot_handlers(client, me):
         for ent in event.message.entities:
             if getattr(ent, "user_id", None):
                 target_id = ent.user_id
+                break  # Take first mentioned user
 
     if not target_id:
-        return await event.reply("❌ No target found. Reply to a user or mention them.")
+        return await event.reply("❌ No target found. Please reply to a user or mention them in the message.")
 
-    mention = f"[Click Here](tg://user?id={target_id})"
+    mention = f"[User](tg://user?id={target_id})"
 
-    await event.reply(f"🔥 Starting raid on {mention} 🔥", parse_mode="md")
+    if not raid_messages:
+        return await event.reply("No raid messages configured.")
 
     try:
         for i in range(count):
-            msg = raid_messages[i % len(raid_messages)]
-            await event.respond(f"{mention} {msg}", parse_mode="md")
-            await asyncio.sleep(0.1)  # fast speed
-        await event.reply(f"✅ Sent {count} raid messages to {mention}", parse_mode="md")
+            text = raid_messages[i % len(raid_messages)]
+            # Send message tagging the user
+            await event.respond(f"{mention} {text}", parse_mode="md")
+            await asyncio.sleep(0.0)  # Delay for rate limit
+
+        await event.reply(f"✅ Sent {count} raid messages tagging the user.")
     except Exception as e:
         await event.reply(f"❌ Error: {e}")
 
