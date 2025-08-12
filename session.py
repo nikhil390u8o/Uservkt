@@ -1,61 +1,107 @@
-from telethon import TelegramClient, events, errors
+from telegram import Update
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    MessageHandler,
+    filters,
+    ContextTypes,
+    ConversationHandler,
+)
+from telethon import TelegramClient
 from telethon.sessions import StringSession
+from telethon.errors import SessionPasswordNeededError
+
+from dotenv import load_dotenv
 import os
 
-API_ID = int(os.getenv("API_ID"))
-API_HASH = os.getenv("API_HASH")
+load_dotenv('gen.env')  # loads variables from gen.env
 
-# Your bot client (use your bot token here)
-bot = TelegramClient('bot_session', API_ID, API_HASH).start(bot_token=os.getenv("BOT_TOKEN"))
+API_ID = int(os.getenv('API_ID'))
+API_HASH = os.getenv('API_HASH')
+PHONE, CODE, PASSWORD = range(3)
 
-@bot.on(events.NewMessage(pattern=r"^/gen$"))
-async def gen_string_handler(event):
-    sender = await event.get_sender()
-    if sender.bot:
-        # Ignore other bots or you can restrict to yourself
-        return
+async def start_gen(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Send me your phone number with country code (e.g. +123456789):")
+    return PHONE
 
-    chat = await event.get_chat()
+async def phone_received(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    phone = update.message.text.strip()
+    context.user_data['phone'] = phone
+    # Create client with no session (new session)
+    client = TelegramClient(StringSession(), API_ID, API_HASH)
+    context.user_data['client'] = client
 
-    # Start conversation with user for session generation
-    async with bot.conversation(chat) as conv:
-        await conv.send_message("Send your phone number (with country code, e.g. +123456789):")
-        phone = (await conv.get_response()).text.strip()
+    await client.connect()
+    try:
+        await client.send_code_request(phone)
+        await update.message.reply_text("Code sent! Please enter the code you received:")
+        return CODE
+    except Exception as e:
+        await update.message.reply_text(f"Failed to send code: {e}\nPlease send your phone number again:")
+        return PHONE
 
-        client = TelegramClient(StringSession(), API_ID, API_HASH)
-        await client.connect()
+async def code_received(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    code = update.message.text.strip()
+    phone = context.user_data['phone']
+    client: TelegramClient = context.user_data['client']
 
-        try:
-            await client.send_code_request(phone)
-        except errors.PhoneNumberInvalidError:
-            await conv.send_message("Invalid phone number. Cancelled.")
-            await client.disconnect()
-            return
+    try:
+        # Sign in
+        me = await client.sign_in(phone, code)
+    except SessionPasswordNeededError:
+        await update.message.reply_text("Two-step verification enabled. Please enter your password:")
+        return PASSWORD
+    except Exception as e:
+        await update.message.reply_text(f"Failed to sign in: {e}\nPlease send the code again:")
+        return CODE
 
-        await conv.send_message("Send the login code you received:")
-        code = (await conv.get_response()).text.strip()
+    # If success without 2FA password:
+    session_str = client.session.save()
+    await update.message.reply_text(f"✅ Logged in successfully!\n\nYour String Session:\n`{session_str}`", parse_mode="Markdown")
+    await client.disconnect()
+    return ConversationHandler.END
 
-        try:
-            await client.sign_in(phone, code)
-        except errors.SessionPasswordNeededError:
-            await conv.send_message("Two-step verification enabled. Send your password:")
-            password = (await conv.get_response()).text.strip()
-            try:
-                await client.sign_in(password=password)
-            except errors.PasswordHashInvalidError:
-                await conv.send_message("Invalid password. Cancelled.")
-                await client.disconnect()
-                return
-        except errors.PhoneCodeInvalidError:
-            await conv.send_message("Invalid code. Cancelled.")
-            await client.disconnect()
-            return
+async def password_received(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    password = update.message.text.strip()
+    client: TelegramClient = context.user_data['client']
+    phone = context.user_data['phone']
 
-        string_session = client.session.save()
-        await conv.send_message(f"✅ Your string session is:\n\n`{string_session}`", parse_mode="markdown")
+    try:
+        me = await client.sign_in(password=password)
+    except Exception as e:
+        await update.message.reply_text(f"Incorrect password or error: {e}\nPlease enter the password again:")
+        return PASSWORD
 
+    session_str = client.session.save()
+    await update.message.reply_text(f"✅ Logged in successfully with 2FA!\n\nYour String Session:\n`{session_str}`", parse_mode="Markdown")
+    await client.disconnect()
+    return ConversationHandler.END
+
+async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Session generation cancelled.")
+    client = context.user_data.get('client')
+    if client and client.is_connected():
         await client.disconnect()
+    return ConversationHandler.END
+
+
+def main():
+    app = ApplicationBuilder().token("YOUR_BOT_TOKEN").build()
+
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler("gen", start_gen)],
+        states={
+            PHONE: [MessageHandler(filters.TEXT & ~filters.COMMAND, phone_received)],
+            CODE: [MessageHandler(filters.TEXT & ~filters.COMMAND, code_received)],
+            PASSWORD: [MessageHandler(filters.TEXT & ~filters.COMMAND, password_received)],
+        },
+        fallbacks=[CommandHandler("cancel", cancel)],
+    )
+
+    app.add_handler(conv_handler)
+
+    print("Bot started...")
+    app.run_polling()
 
 if __name__ == "__main__":
-    print("Bot is running...")
-    bot.run_until_disconnected()
+    main()
