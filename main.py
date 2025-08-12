@@ -299,15 +299,16 @@ def register_userbot_handlers(client, me):
             await event.reply(f"❌ Error: {e}")
 
     @client.on(events.NewMessage(pattern=r"\.raid(?:\s+(\d+))?$"))
-    async def raid_handler(event):
+async def raid_handler(event):
     """Send raid messages. Usage: .raid <count> (reply to a user or mention them)"""
-       if not event.pattern_match.group(1):
-         return await event.reply("Usage: .raid <count> (e.g., .raid 5)")
+    
+    if not event.pattern_match.group(1):
+        return await event.reply("Usage: `.raid <count>` (e.g., `.raid 5`)")
 
     try:
         count = min(int(event.pattern_match.group(1)), 50)  # you can increase limit
     except ValueError:
-        return await event.reply("Invalid count. Example: .raid 5")
+        return await event.reply("Invalid count. Example: `.raid 5`")
 
     # Detect target
     target_id = None
@@ -316,7 +317,7 @@ def register_userbot_handlers(client, me):
         target_id = reply.sender_id
     elif event.message.entities:
         for ent in event.message.entities:
-            if ent.user_id:
+            if getattr(ent, "user_id", None):
                 target_id = ent.user_id
 
     if not target_id:
