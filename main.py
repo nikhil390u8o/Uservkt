@@ -298,8 +298,8 @@ def register_userbot_handlers(client, me):
         except Exception as e:
             await event.reply(f"❌ Error: {e}")
 
-@client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
-async def raid_handler(event):
+ @client.on(events.NewMessage(pattern=r"\.raid(?:\s+\d+)?"))
+ async def raid_handler(event):
     if not event.is_reply:
         return await event.reply("Reply to a message with `.raid <count>`")
 
