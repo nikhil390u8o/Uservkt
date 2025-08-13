@@ -88,11 +88,35 @@ love_messages = [
 
 # ----------------- Telegram Handlers -----------------
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle the /start command."""
-    logger.info(f"/start command received from {update.effective_user.id}")
     user_id = update.effective_user.id
-    waiting_for_string.add(user_id)
-
+    
+    # Check if user joined both channels
+    joined1 = await is_user_joined_channel(user_id, context.bot, REQUIRED_CHANNEL)
+    joined2 = await is_user_joined_channel(user_id, context.bot, REQUIRED_CHANNEL2)
+    
+    if not (joined1 and joined2):
+        # Buttons for both channels
+        keyboard = [
+            [
+                InlineKeyboardButton("Join Channel 1", url=f"https://t.me/{REQUIRED_CHANNEL.lstrip('@')}"),
+                InlineKeyboardButton("Join Channel 2", url=f"https://t.me/{REQUIRED_CHANNEL2.lstrip('@')}"),
+            ],
+            [InlineKeyboardButton("Refresh /start", callback_data="refresh_start")]
+        ]
+        msg_text = (
+            f"🔔 <b>To use this bot, please join both channels below:</b>\n"
+            f"➡️ <a href='https://t.me/{REQUIRED_CHANNEL.lstrip('@')}'>Channel 1</a>\n"
+            f"➡️ <a href='https://t.me/{REQUIRED_CHANNEL2.lstrip('@')}'>Channel 2</a>\n\n"
+            f"Once joined, click /start again or use the Refresh button."
+        )
+        await update.message.reply_text(
+            msg_text,
+            reply_markup=InlineKeyboardMarkup(keyboard),
+            parse_mode="HTML"
+        )
+        return
+    
+    # --- Main menu logic as you already have ---
     keyboard = [
         [
             InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐄𝐋", url=SUPPORT_CHANNEL),
@@ -107,7 +131,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             InlineKeyboardButton("𝐀𝐁𝐎𝐔𝐓", callback_data="about_info")
         ]
     ]
-
     caption = """┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
 ┆◍ ʜᴇʏ, ɪ ᴀᴍ : 𝗥𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
 ┆◍ ɴɪᴄᴇ ᴛᴏ ᴍᴇᴇᴛ ʏᴏᴜ ᴅᴇᴀʀ !! 
