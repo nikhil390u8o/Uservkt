@@ -87,34 +87,70 @@ love_messages = [
 ]
 
 # ----------------- Telegram Handlers -----------------
+# ... (imports, config, etc.)
+
+REQUIRED_CHANNEL = os.getenv("REQUIRED_CHANNEL", "@YourChannelUsername")
+REQUIRED_CHANNEL2 = os.getenv("REQUIRED_CHANNEL2", "@YourSecondChannelUsername")
+
+async def is_user_joined_channel(user_id, bot, channel_username):
+    try:
+        member = await bot.get_chat_member(channel_username, user_id)
+        return member.status in [
+            "member", "administrator", "creator"
+        ]
+    except Exception as e:
+        logger.warning(f"Check join failed for {channel_username}: {e}")
+        return False
+
+async def show_join_channels(update, context):
+    keyboard = [
+        [
+            InlineKeyboardButton("Join Channel 1", url=f"https://t.me/{REQUIRED_CHANNEL.lstrip('@')}"),
+            InlineKeyboardButton("Join Channel 2", url=f"https://t.me/{REQUIRED_CHANNEL2.lstrip('@')}"),
+        ],
+        [InlineKeyboardButton("Refresh", callback_data="refresh_start")]
+    ]
+    msg_text = (
+        f"🔔 <b>To use this bot, join both channels:</b>\n"
+        f"➡️ <a href='https://t.me/{REQUIRED_CHANNEL.lstrip('@')}'>Channel 1</a>\n"
+        f"➡️ <a href='https://t.me/{REQUIRED_CHANNEL2.lstrip('@')}'>Channel 2</a>\n\n"
+        f"Once joined, click /start again or use the Refresh button."
+    )
+    await update.message.reply_text(
+        msg_text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="HTML"
+    )
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
-    
-    # Check if user joined both channels
     joined1 = await is_user_joined_channel(user_id, context.bot, REQUIRED_CHANNEL)
     joined2 = await is_user_joined_channel(user_id, context.bot, REQUIRED_CHANNEL2)
-    
     if not (joined1 and joined2):
-        # Buttons for both channels
-        keyboard = [
-            [
-                InlineKeyboardButton("Join Channel 1", url=f"https://t.me/{REQUIRED_CHANNEL.lstrip('@')}"),
-                InlineKeyboardButton("Join Channel 2", url=f"https://t.me/{REQUIRED_CHANNEL2.lstrip('@')}"),
-            ],
-            [InlineKeyboardButton("Refresh /start", callback_data="refresh_start")]
-        ]
-        msg_text = (
-            f"🔔 <b>To use this bot, please join both channels below:</b>\n"
-            f"➡️ <a href='https://t.me/{REQUIRED_CHANNEL.lstrip('@')}'>Channel 1</a>\n"
-            f"➡️ <a href='https://t.me/{REQUIRED_CHANNEL2.lstrip('@')}'>Channel 2</a>\n\n"
-            f"Once joined, click /start again or use the Refresh button."
-        )
-        await update.message.reply_text(
-            msg_text,
-            reply_markup=InlineKeyboardMarkup(keyboard),
-            parse_mode="HTML"
-        )
+        await show_join_channels(update, context)
         return
+    # Your main menu logic here...
+
+async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    if query.data == "refresh_start":
+        user_id = query.from_user.id
+        joined1 = await is_user_joined_channel(user_id, context.bot, REQUIRED_CHANNEL)
+        joined2 = await is_user_joined_channel(user_id, context.bot, REQUIRED_CHANNEL2)
+        if not (joined1 and joined2):
+            await query.edit_message_text(
+                f"⚠️ You still need to join both channels.",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("Join Channel 1", url=f"https://t.me/{REQUIRED_CHANNEL.lstrip('@')}"),
+                    InlineKeyboardButton("Join Channel 2", url=f"https://t.me/{REQUIRED_CHANNEL2.lstrip('@')}"),],
+                    [InlineKeyboardButton("Refresh", callback_data="refresh_start")]
+                ]),
+                parse_mode="HTML"
+            )
+            return
+        # Show main menu
+        # Optionally call your start() logic here, or directly show the menu
+
+# ... rest of your handlers and app code ...
     
     # --- Main menu logic as you already have ---
     keyboard = [
