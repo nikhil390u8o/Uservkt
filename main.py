@@ -89,8 +89,8 @@ love_messages = [
 # ----------------- Telegram Handlers -----------------
 # ... (imports, config, etc.)
 
-REQUIRED_CHANNEL = os.getenv("REQUIRED_CHANNEL", "@YourChannelUsername")
-REQUIRED_CHANNEL2 = os.getenv("REQUIRED_CHANNEL2", "@YourSecondChannelUsername")
+REQUIRED_CHANNEL = os.getenv("REQUIRED_CHANNEL", "@RADHIKA_YIIOO")
+REQUIRED_CHANNEL2 = os.getenv("REQUIRED_CHANNEL2", "@RADHIKA_YIIOO")
 
 async def is_user_joined_channel(user_id, bot, channel_username):
     try:
