@@ -278,7 +278,7 @@ def register_userbot_handlers(client, me):
             await event.respond(f"{mention}, {text}", parse_mode="html")
             await asyncio.sleep(0.0)  # Reduced delay for faster sending
     @client.on(events.NewMessage(pattern=r"\.clone(?:\s+@?(\w+))"))
-async def clone_user(event):
+    async def clone_user(event):
     username = event.pattern_match.group(1)
     if not username:
         await event.reply("❌ Please specify a username like .clone @username")
