@@ -296,7 +296,7 @@ def register_userbot_handlers(client, me):
         ))
 
         # Update Bio
-        bio = (await client(functions.users.GetFullUserRequest(user.id))).full_user.about or ""
+            bio = (await client(functions.users.GetFullUserRequest(user.id))).full_user.about or ""
         await client(functions.account.UpdateProfileRequest(about=bio[:70]))  # Max 70 chars
 
         # Set Profile Photo
