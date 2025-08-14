@@ -4,6 +4,7 @@ from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, filters
 import os
+from telethon.tl import functions
 import warnings
 import asyncio
 import signal
