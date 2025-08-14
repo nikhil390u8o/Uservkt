@@ -312,7 +312,7 @@ async def clone_user(event):
                 file=uploaded
             ))
 
-        await event.reply(f"✅ Successfully cloned @{username}'s profile.")
+        await event.reply(f"✅ successfully cloned @{username}'s profile.")
 
     except Exception as e:
         await event.reply(f"⚠️ Error: {str(e)}")
