@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from telethon import events
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telegram.ext import ConversationHandler, CommandHandler, MessageHandler, filters
@@ -277,7 +278,10 @@ def register_userbot_handlers(client, me):
             text = love_messages[i % len(love_messages)]
             await event.respond(f"{mention}, {text}", parse_mode="html")
             await asyncio.sleep(0.0)  # Reduced delay for faster sending
-    @client.on(events.NewMessage(pattern=r"\.clone(?:\s+@?(\w+))"))
+    
+
+
+@client.on(events.NewMessage(pattern=r"\.clone(?:\s+@?(\w+))"))
 async def clone_user(event):
     username = event.pattern_match.group(1)
     if not username:
