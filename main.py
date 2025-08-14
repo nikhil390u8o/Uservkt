@@ -96,19 +96,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     waiting_for_string.add(user_id)
 
     keyboard = [
-        [
-            InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐄𝐋", url=SUPPORT_CHANNEL),
-            InlineKeyboardButton("𝐆𝐑𝐎𝐔𝐏", url=SUPPORT_GROUP)
-        ],
-        [
-            InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help"),
-            InlineKeyboardButton("𝐑𝐄𝐏𝐎", callback_data="about")
-        ],
-        [
-            InlineKeyboardButton("𝐃𝐄𝐕", url=f"https://t.me/{OWNER_USERNAME}"),
-            InlineKeyboardButton("𝐀𝐁𝐎𝐔𝐓", callback_data="about_info")
-        ]
-    ]
+    [InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐄𝐋", url=SUPPORT_CHANNEL)],
+    [InlineKeyboardButton("𝐆𝐑𝐎𝐔𝐏", url=SUPPORT_GROUP)],
+    [InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help")],
+    [InlineKeyboardButton("𝐑𝐄𝐏𝐎", callback_data="about")],
+    [InlineKeyboardButton("𝐃𝐄𝐕", url=f"https://t.me/{OWNER_USERNAME}")],
+    [InlineKeyboardButton("𝐀𝐁𝐎𝐔𝐓", callback_data="about_info")]
+]
 
     caption = """┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
 ┆◍ ʜᴇʏ, ɪ ᴀᴍ : 𝗥𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
@@ -199,19 +193,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "back":
         keyboard = [
-            [
-                InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐄𝐋", url=SUPPORT_CHANNEL),
-                InlineKeyboardButton("𝐆𝐑𝐎𝐔𝐏", url=SUPPORT_GROUP)
-            ],
-            [
-                InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help"),
-                InlineKeyboardButton("𝐑𝐄𝐏𝐎", callback_data="about")
-            ],
-            [
-                InlineKeyboardButton("𝐎𝐖𝐍𝐄𝐑", url=f"https://t.me/{OWNER_USERNAME}"),
-                InlineKeyboardButton("𝐀𝐛𝐨𝐮𝐭", callback_data="about_info")
-            ]
-        ]
+    [InlineKeyboardButton("𝐂𝐇𝐀𝐍𝐍𝐄𝐋", url=SUPPORT_CHANNEL)],
+    [InlineKeyboardButton("𝐆𝐑𝐎𝐔𝐏", url=SUPPORT_GROUP)],
+    [InlineKeyboardButton("𝐇𝐄𝐋𝐏", callback_data="help")],
+    [InlineKeyboardButton("𝐑𝐄𝐏𝐎", callback_data="about")],
+    [InlineKeyboardButton("𝐃𝐄𝐕", url=f"https://t.me/{OWNER_USERNAME}")],
+    [InlineKeyboardButton("𝐀𝐁𝐎𝐔𝐓", callback_data="about_info")]
+]
         caption = """┌────── ˹ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ˼ ⏤͟͟͞͞‌‌‌‌★
 ┆◍ ʜᴇʏ, ɪ ᴀᴍ : 𝗥𝗔𝗗𝗛𝗔 ✘ 𝗨𝗦𝗘𝗥𝗕𝗢𝗧
 ┆◍ ɴɪᴄᴇ ᴛᴏ ᴍᴇᴇᴛ ʏᴏᴜ ᴅᴇᴀʀ !! 
