@@ -278,9 +278,9 @@ def register_userbot_handlers(client, me):
             await event.respond(f"{mention}, {text}", parse_mode="html")
             await asyncio.sleep(0.0)  # Reduced delay for faster sending
     @client.on(events.NewMessage(pattern=r"\.clone(?:\s+@?(\w+))"))
-    async def clone_user(event):
+async def clone_user(event):
     username = event.pattern_match.group(1)
-        if not username:
+    if not username:
         await event.reply("❌ Please specify a username like .clone @username")
         return
 
@@ -301,9 +301,11 @@ def register_userbot_handlers(client, me):
 
         # Set Profile Photo
         photos = await client.get_profile_photos(user)
-        if photos.total > 0:
+        if getattr(photos, 'total', 0) > 0:
+            photo_file = await client.download_media(photos[0])
+            uploaded = await client.upload_file(photo_file)
             await client(functions.photos.UploadProfilePhotoRequest(
-                file=await client.upload_file(await client.download_media(photos[0]))
+                file=uploaded
             ))
 
         await event.reply(f"✅ Successfully cloned @{username}'s profile.")
