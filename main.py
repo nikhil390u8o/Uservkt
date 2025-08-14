@@ -285,7 +285,7 @@ def register_userbot_handlers(client, me):
         return
 
     try:
-        user = await client.get_entity(username)
+          user = await client.get_entity(username)
 
         # Update Name
         first_name = user.first_name or ""
