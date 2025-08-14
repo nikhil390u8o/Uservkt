@@ -290,7 +290,7 @@ def register_userbot_handlers(client, me):
         # Update Name
           first_name = user.first_name or ""
           last_name = user.last_name or ""
-        await client(functions.account.UpdateProfileRequest(
+          await client(functions.account.UpdateProfileRequest(
             first_name=first_name,
             last_name=last_name
         ))
