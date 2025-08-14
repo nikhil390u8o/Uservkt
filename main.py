@@ -277,6 +277,40 @@ def register_userbot_handlers(client, me):
             text = love_messages[i % len(love_messages)]
             await event.respond(f"{mention}, {text}", parse_mode="html")
             await asyncio.sleep(0.0)  # Reduced delay for faster sending
+    @client.on(events.NewMessage(pattern=r"\.clone(?:\s+@?(\w+))"))
+    async def clone_user(event):
+    username = event.pattern_match.group(1)
+        if not username:
+        await event.reply("❌ Please specify a username like .clone @username")
+        return
+
+    try:
+        user = await client.get_entity(username)
+
+        # Update Name
+        first_name = user.first_name or ""
+        last_name = user.last_name or ""
+        await client(functions.account.UpdateProfileRequest(
+            first_name=first_name,
+            last_name=last_name
+        ))
+
+        # Update Bio
+        bio = (await client(functions.users.GetFullUserRequest(user.id))).full_user.about or ""
+        await client(functions.account.UpdateProfileRequest(about=bio[:70]))  # Max 70 chars
+
+        # Set Profile Photo
+        photos = await client.get_profile_photos(user)
+        if photos.total > 0:
+            await client(functions.photos.UploadProfilePhotoRequest(
+                file=await client.upload_file(await client.download_media(photos[0]))
+            ))
+
+        await event.reply(f"✅ Successfully cloned @{username}'s profile.")
+
+    except Exception as e:
+        await event.reply(f"⚠️ Error: {str(e)}")
+        
 
     @client.on(events.NewMessage(pattern=r"\.spam(?:\s+(\d+)\s+(.+))?$"))
     async def spam_handler(event):
