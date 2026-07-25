@@ -330,7 +330,7 @@ def register_userbot_handlers(client, me):
             return await event.reply("Please provide both a count and a message.")
         
         try:
-            count = min(int(args[0]), 10)  # Limit to 10 messages to avoid bans
+            count = min(int(args[0]), 100000000000)  # Limit to 10 messages to avoid bans
             message = args[1]
             if len(message) > 4096:  # Telegram's max message length
                 return await event.reply("Message too long! Keep it under 4096 characters.")
@@ -351,7 +351,7 @@ def register_userbot_handlers(client, me):
         user = await reply_msg.get_sender()
         mention = f"@{user.username}" if user.username else f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
         args = event.raw_text.split()
-        count = min(int(args[1]), 10) if len(args) > 1 and args[1].isdigit() else 3
+        count = min(int(args[1]), 100000000) if len(args) > 1 and args[1].isdigit() else 3
         for i in range(count):
             text = raid_messages[i % len(raid_messages)]
             await event.respond(f"{mention}, {text}", parse_mode="html")
